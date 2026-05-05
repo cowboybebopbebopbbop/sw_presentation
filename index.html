@@ -838,7 +838,7 @@
     <section data-background-color="#ffffff" class="bg-paper dense">
       <div class="eyebrow anim-up" data-d="0">Безопасность и&nbsp;контур данных</div>
       <h2 class="anim-up" data-d="100">Под&nbsp;политики&nbsp;ИБ — три уровня контура</h2>
-      <p class="lede anim-up" data-d="200">Архитектура изначально multi-model. Можно выбрать, какие шаги пайплайна выполняются на&nbsp;каком провайдере.</p>
+      <p class="lede anim-up" data-d="200">Архитектура изначально мультимодельна. Можно выбрать, какие этапы каким провайдером&nbsp;<span style="font-family: Inter, -apple-system, &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400;">обрабатываются</span></p>
 
       <div class="tier-cards">
         <div class="tier-card recommended anim-up" data-d="320">
@@ -846,8 +846,8 @@
           <h3>Рекомендуем для&nbsp;пилота</h3>
           <ul>
             <li>Генерация: Anthropic Claude Opus (через посредника)</li>
-            <li>Простые шаги (подсчёт символов, парсинг): Gemini Flash / Haiku</li>
-            <li>Юрисдикция: смешанная, без&nbsp;ПДн</li>
+            <li>Простые шаги (подсчёт символов, парсинг брифа): Gemini Flash / Haiku</li>
+            <li>Юрисдикция: смешанная, без&nbsp;ПД</li>
           </ul>
           <div class="when">Срок: готово сейчас</div>
         </div>
@@ -859,11 +859,11 @@
             <li>Креативные шаги: Anthropic, опционально</li>
             <li>Юрисдикция: преимущественно РФ</li>
           </ul>
-          <div class="when">Срок: +1&ndash;2&nbsp;нед на&nbsp;роутинг</div>
+          <div class="when">Срок: +1–2&nbsp;нед на&nbsp;роутинг</div>
         </div>
         <div class="tier-card anim-up" data-d="520">
           <div class="tier-label">Уровень 3 · Self-hosted</div>
-          <h3>Для&nbsp;on-prem-требований</h3>
+          <h3>Для&nbsp;on-premise требований</h3>
           <ul>
             <li>Self-hosted Qwen&nbsp;3 / DeepSeek&nbsp;V3 на&nbsp;Yandex&nbsp;Cloud&nbsp;GPU</li>
             <li>Полностью внутри корпоративного облака&nbsp;SW</li>
@@ -885,16 +885,16 @@
     <section data-background-color="#ffffff" class="bg-paper dense">
       <div class="eyebrow anim-up" data-d="0">Разбивка цены</div>
       <h2 class="anim-up" data-d="100">170&nbsp;000&nbsp;₽ / месяц — что внутри</h2>
-      <p class="lede anim-up" data-d="200">Это не&nbsp;подписка на&nbsp;чат. Это услуга с&nbsp;тремя статьями расходов.</p>
+      <p class="lede anim-up" data-d="200">Три блока затрат</p>
 
       <table class="audit-table anim-up" data-d="320">
         <thead>
           <tr><th style="width:28%">Статья расхода</th><th style="width:18%">₽ / мес</th><th>Что входит</th></tr>
         </thead>
         <tbody>
-          <tr><td>Токены LLM</td><td class="num-cell">~50&ndash;60к</td><td>Anthropic Claude&nbsp;Opus 4.6/4.7&nbsp;+ резерв на&nbsp;repair&nbsp;loop. Расход прозрачно прокидывается в&nbsp;ежемесячный отчёт.</td></tr>
-          <tr><td>Платформа и&nbsp;поддержка</td><td class="num-cell">~50&ndash;60к</td><td>Хостинг, мониторинг, реакция на&nbsp;инциденты, обновления валидатора, патчи безопасности.</td></tr>
-          <tr><td>Кастомизация и&nbsp;интеграции</td><td class="num-cell">~50&ndash;60к</td><td>Настройка под&nbsp;форматы&nbsp;SW, расширение лексикона, добавление новых форматов под&nbsp;запрос (например, SKU-интеграция в&nbsp;SEO).</td></tr>
+          <tr><td>Токены LLM</td><td class="num-cell">~50–60к</td><td>Anthropic Claude&nbsp;Opus 4.6/4.7 (в результате тестов показали себя лучше всего для текстов) + резерв на&nbsp;repair&nbsp;loop. Расход прозрачно прокидывается в&nbsp;ежемесячный отчёт.</td></tr>
+          <tr><td>Платформа и&nbsp;поддержка</td><td class="num-cell">~50–60к</td><td>Хостинг, мониторинг, реакция на&nbsp;инциденты, обновления валидатора, патчи безопасности.</td></tr>
+          <tr><td>Кастомизация и&nbsp;интеграции</td><td class="num-cell">~50–60к</td><td>Настройка под&nbsp;форматы&nbsp;SW, расширение лексикона, добавление новых форматов под&nbsp;запрос (например, SKU-интеграция в&nbsp;SEO).</td></tr>
           <tr><td><strong>Итого</strong></td><td class="num-cell"><strong>~170&nbsp;000</strong></td><td><strong>Услуги&nbsp;+ инфра. Не&nbsp;лицензия.</strong></td></tr>
         </tbody>
       </table>
