@@ -793,7 +793,7 @@
           <h3>Покидает контур (только это)</h3>
           <ul>
             <li><strong>Только текст брифа:</strong> продукт, акция, %&nbsp;скидки, обобщённая ЦА</li>
-            <li>ПД в&nbsp;брифе не&nbsp;пропускаются — мы можем контролировать это на&nbsp;входе через «редактор брифа» (вырезает потенциальные ПД перед отправкой)</li>
+            <li>Персональные данные из брифа<b>&nbsp;<b>не&nbsp;пропускаются</b> </b>— встроенный фильтр автоматически убирает их перед отправкой</li>
             <li><br></li>
           </ul>
         </div>
@@ -809,30 +809,30 @@
 
     <section data-background-color="#ffffff" class="bg-paper dense">
       <div class="eyebrow anim-up" data-d="0">Безопасность и&nbsp;контур данных</div>
-      <h2 class="anim-up" data-d="100">10&nbsp;вопросов от&nbsp;ИБ — 10&nbsp;ответов</h2>
+      <h2 class="anim-up" data-d="100">Как всё устроено с точки зрения безопасности</h2>
 
       <table class="audit-table anim-up" data-d="220">
         <thead>
           <tr>
-            <th style="width:32%">Вопрос ИБ</th>
+            <th style="width:32%">Вопросы, которые может задать ИБ</th>
             <th class="col-us">Что обеспечено в&nbsp;пилоте</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>Где физически хранятся брифы?</td><td class="col-us">Не&nbsp;хранятся в&nbsp;нашей системе. Передаются транзитом, после генерации не&nbsp;персистятся на&nbsp;нашей стороне.</td></tr>
+          <tr><td>Где физически хранятся брифы?</td><td class="col-us">Не&nbsp;хранятся в системе. Передаются транзитом, после генерации не&nbsp;сохраняются.</td></tr>
           <tr><td>Шифрование канала?</td><td class="col-us">TLS&nbsp;1.3, end-to-end по&nbsp;всему маршруту.</td></tr>
           <tr><td>Кто имеет доступ к&nbsp;брифам?</td><td class="col-us">Только аутентифицированный пользователь&nbsp;SW в&nbsp;своей сессии. Изоляция тенанта на&nbsp;уровне ключа.</td></tr>
-          <tr><td>Учит ли LLM-провайдер модель на&nbsp;наших данных?</td><td class="col-us">Anthropic — нет (no-training by&nbsp;default, фиксируется в&nbsp;договоре). Yandex&nbsp;GPT — нет, по&nbsp;корп-договору.</td></tr>
-          <tr><td>Аудит-лог обращений</td><td class="col-us">Append-only лог в&nbsp;Yandex&nbsp;Object&nbsp;Storage, экспорт в&nbsp;PDF — входит в&nbsp;пилот.</td></tr>
-          <tr><td>Аутентификация</td><td class="col-us">OAuth&nbsp;2.0&nbsp;+ опционально SSO через Keycloak / корп.&nbsp;AD — входит в&nbsp;пилот.</td></tr>
-          <tr><td>152-ФЗ (ПДн)</td><td class="col-us">В&nbsp;брифах ПДн не&nbsp;передаются by&nbsp;design. Pre-processing «редактор брифа» автоматически вырезает потенциальные ПДн.</td></tr>
-          <tr><td>Юрисдикция данных</td><td class="col-us">Опция&nbsp;1: Anthropic&nbsp;(US). Опция&nbsp;2: Yandex&nbsp;GPT&nbsp;(РФ) для&nbsp;чувствительных шагов. Multi-model роутинг настраивается под&nbsp;политики&nbsp;IT.</td></tr>
-          <tr><td>Договор / NDA / DPA</td><td class="col-us">Стандартный пакет: NDA + DPA + SLA на&nbsp;uptime. Услуги оказываются с&nbsp;российского юрлица в&nbsp;рублях.</td></tr>
-          <tr><td>Бэкапы и&nbsp;инцидент-менеджмент</td><td class="col-us">Knowledge-база (бренд-гайд, лексикон, правила) — в&nbsp;git с&nbsp;историей. Runbook реагирования на&nbsp;инцидент — часть документации пилота.</td></tr>
+          <tr><td>Учит ли LLM-провайдер модель на&nbsp;наших данных?</td><td class="col-us">Anthropic — нет (no-training by&nbsp;default, фиксируется в&nbsp;договоре). Yandex&nbsp;GPT — нет, по&nbsp;корпдоговору.</td></tr>
+          <tr><td>Аудит-лог обращений?</td><td class="col-us">Append-only лог в&nbsp;Yandex&nbsp;Object&nbsp;Storage, экспорт в&nbsp;PDF — входит в&nbsp;пилот.</td></tr>
+          <tr><td>Аутентификация?</td><td class="col-us">OAuth&nbsp;2.0&nbsp;+ опционально SSO через Keycloak / корп.&nbsp;AD — входит в&nbsp;пилот.</td></tr>
+          <tr><td>152-ФЗ (персональные данные)?</td><td class="col-us">В&nbsp;брифах ПД не&nbsp;передаются by&nbsp;design. Pre-processing «редактор брифа» автоматически вырезает потенциальные ПД.</td></tr>
+          <tr><td>Юрисдикция данных?</td><td class="col-us">Опция&nbsp;1: Anthropic&nbsp;(US). Опция&nbsp;2: Yandex&nbsp;GPT&nbsp;(РФ) для&nbsp;чувствительных шагов. Можно настроить, какие задачи идут через какого провайдера — под политики IT.</td></tr>
+          <tr><td>Договор / NDA / DPA?</td><td class="col-us">Стандартный пакет: NDA + DPA + SLA на&nbsp;uptime. Услуги оказываются с&nbsp;российского юрлица в&nbsp;рублях.</td></tr>
+          <tr><td>Бэкапы и&nbsp;инцидент-менеджмент?</td><td class="col-us">Knowledge-база (бренд-гайд, лексикон, правила) — в&nbsp;git с&nbsp;историей. Runbook реагирования на&nbsp;инцидент — часть документации пилота.</td></tr>
         </tbody>
       </table>
 
-      <p class="footnote anim-up" data-d="500" style="margin-top:18px">Полный технический документ для&nbsp;ИБ — отдельный pre-pilot deliverable, передаётся напрямую IT-директору. Этот слайд — выжимка.</p>
+      <p class="footnote anim-up" data-d="500" style="margin-top:18px">Здесь собрали выжимку, полный технический документ для&nbsp;ИБ — отдельный pre-pilot deliverable, передается напрямую IT-директору.</p>
     </section>
 
     <section data-background-color="#ffffff" class="bg-paper dense">
