@@ -34,24 +34,30 @@ header{height:50px;background:#181110;color:#fff;padding:0 16px;display:flex;ali
 #sb{width:260px;flex-shrink:0;background:var(--white);border-right:1px solid var(--rule);display:flex;flex-direction:column;overflow:hidden}
 .sb-hd{padding:10px 12px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:8px}
 .sb-hd h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--soft);flex:1}
-#ct{font-size:11px;color:#bbb}
-#sl{flex:1;overflow-y:auto;padding:5px;display:flex;flex-direction:column;gap:2px;outline:none}
+/* Sidebar */
+#sb{width:300px;flex-shrink:0;background:var(--white);border-right:1px solid var(--rule);display:flex;flex-direction:column;overflow:hidden}
+.sb-hd{padding:14px 16px 12px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:8px}
+.sb-hd h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--soft);flex:1}
+#ct{font-size:11px;color:#bbb;font-weight:500}
+#sl{flex:1;overflow-y:auto;padding:10px 10px 14px;display:flex;flex-direction:column;gap:6px;outline:none}
 
-.sc{border-radius:6px;border:1.5px solid transparent;background:#fafafa;display:flex;align-items:stretch;cursor:pointer;transition:border-color .1s,background .1s;user-select:none;position:relative;overflow:hidden}
-.sc::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;border-radius:2px;background:rgba(0,0,0,.08)}
+.sc{border-radius:8px;border:1.5px solid transparent;background:#fafafa;display:flex;align-items:stretch;cursor:pointer;transition:border-color .12s,background .12s,box-shadow .12s;user-select:none;position:relative;overflow:hidden;min-height:54px}
+.sc::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:2px;background:rgba(0,0,0,.1)}
 .sc.divider::before{background:var(--red)}
-.sc:hover{background:#f6f0ee}
-.sc.active{border-color:var(--red);background:#fff5f7}
+.sc:hover{background:#f3ede9}
+.sc.active{border-color:var(--red);background:#fff5f7;box-shadow:0 1px 4px rgba(166,29,71,.08)}
 .sc.active::before{background:var(--red)}
 .sc.drag-over{border-color:var(--red);background:#fff5f7;border-style:dashed}
 .sc.dragging{opacity:.22}
-.sc-grip{width:22px;flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:0 5px;align-content:center;cursor:grab}
+.sc-grip{width:24px;flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:0 6px;align-content:center;cursor:grab}
 .sc-grip:active{cursor:grabbing}
-.sc-grip span{display:block;width:3px;height:3px;border-radius:50%;background:#d8d0cc}
-.sc-body{flex:1;padding:7px 8px;min-width:0}
-.sc-n{font-size:10px;color:#bbb;font-weight:600;line-height:1}
-.sc-lbl{font-size:12px;font-weight:600;color:var(--ink);line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-top:2px}
-.sc.divider .sc-lbl{color:var(--red)}
+.sc-grip span{display:block;width:3px;height:3px;border-radius:50%;background:#d0c8c4}
+.sc:hover .sc-grip span{background:#a89e9a}
+.sc-body{flex:1;padding:9px 12px 10px 6px;min-width:0;display:flex;flex-direction:column;gap:4px;justify-content:center}
+.sc-n{font-size:10px;color:#a8a09d;font-weight:600;line-height:1;letter-spacing:.06em;display:flex;align-items:center;gap:6px}
+.sc-n .tag{font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--red);background:rgba(166,29,71,.1);padding:1px 5px;border-radius:3px}
+.sc-lbl{font-size:13px;font-weight:600;color:var(--ink);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.sc.divider .sc-lbl{color:var(--red);font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:14px}
 
 /* Preview */
 #pv-wrap{flex:1;display:flex;flex-direction:column;background:#1a1a1a;overflow:hidden}
@@ -296,7 +302,7 @@ function renderList(){
     el.innerHTML=
       '<div class="sc-grip" title="Drag to reorder"><span></span><span></span><span></span><span></span><span></span><span></span></div>'+
       '<div class="sc-body">'+
-        '<div class="sc-n">'+String(i+1).padStart(2,'0')+(s.isDivider?' · DIVIDER':'')+'</div>'+
+        '<div class="sc-n">'+String(i+1).padStart(2,'0')+(s.isDivider?'<span class="tag">DIVIDER</span>':'')+'</div>'+
         '<div class="sc-lbl" title="'+esc(s.label)+'">'+esc(s.label)+'</div>'+
       '</div>';
     el.addEventListener('click',()=>selectSlide(i));
