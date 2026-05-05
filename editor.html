@@ -367,12 +367,13 @@ function refreshPreview(){
     '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">'+
     '<style>'+css+'\n'+
     'html,body{margin:0;padding:0;overflow:hidden;background:#fff}\n'+
+    '.reveal,.reveal .slides,.reveal .slides>section,.reveal .slides>section *{-webkit-user-select:text!important;-moz-user-select:text!important;user-select:text!important}\n'+
     '.reveal,.reveal .slides{width:1280px!important;height:720px!important;position:absolute!important;top:0;left:0}\n'+
-    '.reveal .slides>section{display:block!important;position:absolute!important;opacity:1!important;transform:none!important;visibility:visible!important;top:0;left:0;width:1280px;height:720px}\n'+
+    '.reveal .slides>section{display:block!important;position:absolute!important;opacity:1!important;transform:none!important;visibility:visible!important;top:0;left:0;width:1280px;height:720px;pointer-events:auto!important}\n'+
     '.anim-up,[data-d]{opacity:1!important;transform:none!important;transition:none!important}\n'+
-    '[contenteditable]{cursor:text;border-radius:3px;transition:box-shadow .12s,background .12s}\n'+
-    '[contenteditable]:hover{box-shadow:0 0 0 2px rgba(166,29,71,.35)}\n'+
-    '[contenteditable]:focus{outline:none;box-shadow:0 0 0 2px #A61D47;background:rgba(166,29,71,.05)}\n'+
+    '[contenteditable=true]{cursor:text!important;border-radius:3px;transition:box-shadow .12s,background .12s}\n'+
+    '[contenteditable=true]:hover{box-shadow:0 0 0 2px rgba(166,29,71,.4)}\n'+
+    '[contenteditable=true]:focus{outline:none;box-shadow:0 0 0 2px #A61D47;background:rgba(166,29,71,.06)}\n'+
     '</style></head><body>'+
     '<div class="reveal"><div class="slides">'+slides[activeIdx].html+'</div></div>'+
     '<'+'script>'+editorScript+'<'+'/script>'+
