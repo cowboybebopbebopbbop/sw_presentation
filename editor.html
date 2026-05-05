@@ -234,7 +234,7 @@ textarea.field-input.tall{min-height:80px}
         <textarea id="ed" style="display:none" spellcheck="false"></textarea>
         <div id="pv-wrap">
           <div class="pv-bar">
-            Preview
+            Preview &middot; <span style="font-weight:400;color:#777">click text to edit</span>
             <a href="https://cowboybebopbebopbbop.github.io/sw_presentation/" target="_blank">Open live &#8599;</a>
           </div>
           <iframe id="pv-frame" title="Slide preview" sandbox="allow-scripts allow-same-origin"></iframe>
@@ -695,6 +695,23 @@ function getCSS() { const m=(htmlPre+htmlPost).match(/<style>([\s\S]*?)<\/style>
 function refreshPreview() {
   if (activeIdx<0 || !pvVisible) return;
   const css=getCSS();
+  const pvScript='(function(){'+
+    'var ES="h1,h2,h3,.eyebrow,.lede,.footnote,.sec-title,.sec-num,.sec-kicker";'+
+    'function sc(){var s=Math.min(window.innerWidth/1280,window.innerHeight/720),d=document.querySelector(".reveal");if(d){d.style.transform="scale("+s+")";d.style.transformOrigin="0 0";}}'+
+    'window.addEventListener("resize",sc);window.addEventListener("load",sc);'+
+    'document.addEventListener("DOMContentLoaded",function(){'+
+      'setTimeout(sc,30);'+
+      'document.querySelectorAll(ES).forEach(function(el){el.contentEditable="true";});'+
+      'var et;'+
+      'document.addEventListener("input",function(){'+
+        'clearTimeout(et);'+
+        'et=setTimeout(function(){'+
+          'var s=document.querySelector(".slides section");'+
+          'if(s)window.parent.postMessage({type:"swEdit",html:s.outerHTML},"*");'+
+        '},400);'+
+      '});'+
+    '});'+
+  '})()'
   const tpl='<!doctype html><html lang="ru"><head><meta charset="utf-8">' +
     '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
     '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700;1,900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">' +
@@ -703,11 +720,37 @@ function refreshPreview() {
     '<style>'+css+'\nhtml,body{margin:0;padding:0;overflow:hidden;background:#fff}\n' +
     '.reveal,.reveal .slides{width:1280px!important;height:720px!important;position:absolute!important;top:0;left:0}\n' +
     '.reveal .slides>section{display:block!important;position:absolute!important;opacity:1!important;transform:none!important;visibility:visible!important;top:0;left:0;width:1280px;height:720px}\n' +
-    '.anim-up,[data-d]{opacity:1!important;transform:none!important;transition:none!important}</style></head><body>' +
-    '<'+'script>(function(){function sc(){var s=Math.min(window.innerWidth/1280,window.innerHeight/720),d=document.querySelector(".reveal");if(d){d.style.transform="scale("+s+")";d.style.transformOrigin="0 0";}}window.addEventListener("resize",sc);window.addEventListener("load",sc);document.addEventListener("DOMContentLoaded",function(){setTimeout(sc,30);});})();<'+'/script>' +
+    '.anim-up,[data-d]{opacity:1!important;transform:none!important;transition:none!important}\n' +
+    '[contenteditable]:hover{outline:2px dashed rgba(166,29,71,.5);outline-offset:4px;border-radius:3px;cursor:text}\n' +
+    '[contenteditable]:focus{outline:2px solid #A61D47;outline-offset:4px;border-radius:3px;background:rgba(166,29,71,.05)}</style></head><body>' +
+    '<'+'script>'+pvScript+'<'+'/script>' +
     '<div class="reveal"><div class="slides">'+slides[activeIdx].html+'</div></div></body></html>';
   document.getElementById('pv-frame').srcdoc=tpl;
 }
+
+// Inline preview editing
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'swEdit' || activeIdx < 0) return;
+  if (e.source !== document.getElementById('pv-frame').contentWindow) return;
+  const doc = new DOMParser().parseFromString('<!doctype html><html><body>'+e.data.html+'</body></html>', 'text/html');
+  doc.querySelectorAll('[contenteditable]').forEach(function(el){ el.removeAttribute('contenteditable'); });
+  const sec = doc.querySelector('section');
+  if (!sec) return;
+  const cleaned = sec.outerHTML;
+  slides[activeIdx].html = cleaned;
+  const isDivider = sec.classList.contains('section-divider');
+  const gt = function(sel){ const n=sec.querySelector(sel); return n?n.textContent.replace(/\s+/g,' ').trim():''; };
+  slides[activeIdx].label = (isDivider?(gt('.sec-title')||gt('.sec-num')):(gt('h1')||gt('h2')||gt('.eyebrow')||'Slide '+(activeIdx+1))).substring(0,80);
+  markDirty();
+  renderList();
+  if (activeTab==='html') document.getElementById('ed').value=cleaned;
+  else if (activeTab==='fields') {
+    document.getElementById('fields-form').innerHTML=buildFieldsForm(slides[activeIdx]);
+    document.getElementById('fields-form').querySelectorAll('.field-input').forEach(function(inp){
+      inp.addEventListener('input',function(){markDirty();scheduleFieldsPreview();});
+    });
+  }
+});
 
 // Keyboard shortcuts
 document.addEventListener('keydown', function(e) {
