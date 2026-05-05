@@ -421,6 +421,58 @@
 
   .platform-claim { margin-top: 28px; padding: 22px 28px; background: var(--sw-burgundy); color: #fff; font-family: var(--font-display); font-style: italic; font-size: 1.25rem; line-height: 1.45; text-align: center; }
   .platform-claim em { color: #f4e0c8; font-style: normal; font-weight: 600; }
+
+  /* ============================================================
+     SECTION DIVIDERS — burgundy intro slide before each chapter
+     ============================================================ */
+  .reveal .slides section.section-divider {
+    background: var(--sw-burgundy);
+    color: var(--sw-cream);
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 110px;
+  }
+  .section-divider .sec-num {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 32px;
+  }
+  .section-divider h2.sec-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 5.4rem;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--sw-cream);
+    margin: 0;
+    max-width: 1020px;
+  }
+  .section-divider h2.sec-title em {
+    font-style: italic;
+    font-weight: 500;
+    color: #f4e0c8;
+  }
+  .section-divider .sec-rule {
+    width: 88px;
+    height: 4px;
+    background: var(--sw-cream);
+    margin-top: 40px;
+    opacity: 0.9;
+  }
+  .section-divider .sec-kicker {
+    margin-top: 28px;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+    max-width: 760px;
+    font-weight: 400;
+  }
 </style>
 </head>
 <body>
@@ -516,6 +568,13 @@
       <p class="footnote anim-up" data-d="1500" style="margin-top:36px">Система снижает рутину и&nbsp;даёт время на&nbsp;то, что AI не&nbsp;умеет: креатив, качественную редактуру, понимание пользователя. Без&nbsp;людей это просто генератор текста, но&nbsp;с людьми она становится инструментом, который работает на&nbsp;стратегию.</p>
     </section>
 
+    <!-- DIVIDER · Как работает -->
+    <section data-background-color="#A61D47" class="section-divider">
+      <div class="sec-num anim-up" data-d="0">Раздел 01</div>
+      <h2 class="sec-title anim-up" data-d="120">Как&nbsp;работает <em>система</em></h2>
+      <div class="sec-rule anim-up" data-d="260"></div>
+    </section>
+
     <!-- 3. КАК РАБОТАЕТ -->
     <section data-background-color="#ffffff" class="bg-paper">
       <div class="eyebrow anim-up" data-d="0">Как работает система</div>
@@ -549,6 +608,13 @@
       </div>
 
       <p class="footnote anim-up" data-d="2300" style="margin-top:52px">* В&nbsp;том или&nbsp;ином формате AI-инструменты уже стали частью контент-производства — вопрос в&nbsp;том, как&nbsp;обеспечить контроль и&nbsp;безопасность. Потому что банальная выгрузка брифов в&nbsp;ChatGPT не&nbsp;даёт таких гарантий.</p>
+    </section>
+
+    <!-- DIVIDER · Позиционирование -->
+    <section data-background-color="#A61D47" class="section-divider">
+      <div class="sec-num anim-up" data-d="0">Раздел 02</div>
+      <h2 class="sec-title anim-up" data-d="120"><em>Позиционирование</em></h2>
+      <div class="sec-rule anim-up" data-d="260"></div>
     </section>
 
     <!-- ============================================================ -->
@@ -650,6 +716,13 @@
       <div class="platform-claim anim-up" data-d="700"><em>ROI подписки</em>&nbsp;= время одного человека.&nbsp;&nbsp;<em>ROI платформы</em>&nbsp;= весь цикл согласования между ролями.</div>
 
       <p class="footnote anim-up" data-d="840" style="margin-top:18px">Платформа не&nbsp;заменяет роли — она убирает простои между ними. Тему и&nbsp;стратегию задаёт человек, финальное «опубликовать» — тоже человек. Тот&nbsp;же подход применим к&nbsp;multiformat-пакетам, email-кампаниям и&nbsp;любым новым процессам, где сейчас цепочка ролей передаёт работу из&nbsp;рук в&nbsp;руки.</p>
+    </section>
+
+    <!-- DIVIDER · Сравнение -->
+    <section data-background-color="#A61D47" class="section-divider">
+      <div class="sec-num anim-up" data-d="0">Раздел 03</div>
+      <h2 class="sec-title anim-up" data-d="120">Сравнение с&nbsp;<em>альтернативами</em></h2>
+      <div class="sec-rule anim-up" data-d="260"></div>
     </section>
 
     <!-- ============================================================ -->
@@ -778,6 +851,13 @@
       <p class="footnote anim-up" data-d="1700" style="margin-top:32px">Vinlab × Yandex анонсировали партнёрство — публичных продуктовых результатов пока нет. Окно для&nbsp;решения — сейчас, не&nbsp;через квартал.</p>
     </section>
 
+    <!-- DIVIDER · Безопасность -->
+    <section data-background-color="#A61D47" class="section-divider">
+      <div class="sec-num anim-up" data-d="0">Раздел 04</div>
+      <h2 class="sec-title anim-up" data-d="120">Безопасность и&nbsp;<em>контур данных</em></h2>
+      <div class="sec-rule anim-up" data-d="260"></div>
+    </section>
+
     <!-- ============================================================ -->
     <!-- 6.1 БЕЗОПАСНОСТЬ — КАРТА ДАННЫХ                              -->
     <!-- ============================================================ -->
@@ -889,6 +969,13 @@
       </div>
 
       <p class="footnote anim-up" data-d="700" style="margin-top:24px">Валидатор и&nbsp;обвязка работают на&nbsp;любой из&nbsp;трёх конфигураций — это собственная разработка, не&nbsp;зависит от&nbsp;LLM-провайдера. Смена контура не&nbsp;ломает compliance-гарантии.</p>
+    </section>
+
+    <!-- DIVIDER · Цена -->
+    <section data-background-color="#A61D47" class="section-divider">
+      <div class="sec-num anim-up" data-d="0">Раздел 05</div>
+      <h2 class="sec-title anim-up" data-d="120">Разбивка <em>цены</em></h2>
+      <div class="sec-rule anim-up" data-d="260"></div>
     </section>
 
     <!-- ============================================================ -->
@@ -1017,6 +1104,13 @@
       </table>
 
       <p class="footnote anim-up" data-d="840" style="margin-top:18px">Реальный ROI выше: к&nbsp;экономии ФОТ добавляется высвобожденное время на&nbsp;ресёрч и&nbsp;новые форматы, X2&ndash;X4&nbsp;рост SEO для&nbsp;восстановления органики, исключение compliance-инцидентов. В&nbsp;расчёт сознательно не&nbsp;заложены — продаём только то, что измеримо в&nbsp;первый месяц.</p>
+    </section>
+
+    <!-- DIVIDER · Пилот -->
+    <section data-background-color="#A61D47" class="section-divider">
+      <div class="sec-num anim-up" data-d="0">Раздел 06</div>
+      <h2 class="sec-title anim-up" data-d="120"><em>Варианты</em> пилота</h2>
+      <div class="sec-rule anim-up" data-d="260"></div>
     </section>
 
     <!-- ============================================================ -->
@@ -1192,6 +1286,13 @@
       </table>
 
       <p class="footnote anim-up" data-d="500" style="margin-top:22px"><span class="stamp">Любой из&nbsp;трёх вариантов</span> оплачивается с&nbsp;российского юрлица в&nbsp;рублях. Формат договора (с&nbsp;ИП или&nbsp;ООО заказчика) согласуем под&nbsp;бухгалтерию&nbsp;SW — нужны лимиты и&nbsp;политика по&nbsp;ИП от&nbsp;вашей стороны.</p>
+    </section>
+
+    <!-- DIVIDER · Следующие шаги -->
+    <section data-background-color="#A61D47" class="section-divider">
+      <div class="sec-num anim-up" data-d="0">Раздел 07</div>
+      <h2 class="sec-title anim-up" data-d="120">Следующие <em>шаги</em></h2>
+      <div class="sec-rule anim-up" data-d="260"></div>
     </section>
 
     <!-- ============================================================ -->
