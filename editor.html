@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slide Editor — Simple Wine Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#A61D47;--red-d:#7d1535;--ink:#1a1413;--soft:#6b5f5d;
+  --rule:#e8e4df;--bg:#f5f3f0;--white:#fff;--green:#1f9b57;
+  --font:'Inter',-apple-system,sans-serif;
+  --mono:'SF Mono','Fira Code','Consolas',monospace;
+}
+html,body{height:100%;overflow:hidden;font-family:var(--font);font-size:13px;color:var(--ink);background:var(--bg)}
+#app{height:100vh;display:flex;flex-direction:column}
+
+/* ── HEADER ── */
+header{height:50px;background:#181110;color:#fff;padding:0 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;border-bottom:1px solid #2a1c1a}
+.logo{font-size:13px;font-weight:700;letter-spacing:-.015em;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.logo-pip{width:9px;height:9px;background:var(--red);border-radius:50%;flex-shrink:0}
+.h-div{width:1px;height:22px;background:rgba(255,255,255,.14)}
+.h-gap{flex:1}
+.token-row{display:flex;align-items:center;gap:7px}
+.token-row label{font-size:11px;color:rgba(255,255,255,.45);white-space:nowrap}
+input.tok{width:210px;padding:5px 10px;border-radius:5px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#fff;font-size:12px;font-family:var(--mono);outline:none}
+input.tok:focus{border-color:rgba(255,255,255,.4)}
+input.tok::placeholder{color:rgba(255,255,255,.27)}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18);flex-shrink:0;transition:background .2s}
+.dot.ok{background:#4fc44f}.dot.err{background:#f05050}
+#st{font-size:11px;color:rgba(255,255,255,.45)}
+.btn{padding:5px 13px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600;font-family:var(--font);transition:opacity .12s;white-space:nowrap}
+.btn:hover:not(:disabled){opacity:.82}.btn:disabled{opacity:.35;cursor:default}
+.btn-ghost{background:rgba(255,255,255,.1);color:rgba(255,255,255,.9)}
+.btn-ghost:hover:not(:disabled){background:rgba(255,255,255,.17);opacity:1}
+.btn-save{background:var(--green);color:#fff;padding:6px 16px;font-size:13px}
+
+/* ── LAYOUT ── */
+#main{flex:1;display:flex;overflow:hidden}
+
+/* ── SIDEBAR ── */
+#sb{width:270px;flex-shrink:0;background:var(--white);border-right:1px solid var(--rule);display:flex;flex-direction:column}
+.sb-hd{padding:11px 14px;border-bottom:1px solid var(--rule);display:flex;align-items:center}
+.sb-hd h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--soft);flex:1}
+#ct{font-size:11px;color:#bbb}
+#sl{flex:1;overflow-y:auto;padding:5px;display:flex;flex-direction:column;gap:3px}
+
+/* slide card */
+.sc{border-radius:7px;border:2px solid transparent;background:#fafafa;display:flex;align-items:stretch;cursor:pointer;transition:border-color .1s,background .1s;user-select:none}
+.sc:hover{background:#f4eeec;border-color:var(--rule)}
+.sc.active{border-color:var(--red);background:#fff3f6}
+.sc.drag-over{border-color:var(--red);background:#fff3f6;border-style:dashed}
+.sc.dragging{opacity:.28}
+.sc-grip{width:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#ccc;cursor:grab;font-size:15px}
+.sc-grip:active{cursor:grabbing}
+.sc-body{flex:1;padding:8px 5px;min-width:0}
+.sc-n{font-size:10px;color:#bbb;font-weight:600}
+.sc-lbl{font-size:12px;font-weight:600;color:var(--ink);line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.sc.divider .sc-lbl{color:var(--red)}
+.sc-kind{font-size:10px;color:#bbb;margin-top:3px}
+.sc.divider .sc-kind{color:#e090aa;font-weight:600}
+.sc-del{width:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#ddd;font-size:13px;visibility:hidden;border-radius:0 5px 5px 0}
+.sc:hover .sc-del{visibility:visible}
+.sc-del:hover{background:#ffecec;color:#d93030}
+
+#add-btn{margin:6px;padding:7px;border:2px dashed var(--rule);border-radius:7px;background:none;color:var(--soft);font-size:12px;font-family:var(--font);cursor:pointer;text-align:center}
+#add-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* ── EDITOR PANEL ── */
+#panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.ptb{padding:9px 16px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--white)}
+.ptb h3{flex:1;font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ptb-hint{font-size:11px;color:#bbb}
+.ptb-btns{display:flex;gap:6px}
+.btn-sm{padding:4px 10px;border-radius:5px;border:none;cursor:pointer;font-size:11px;font-weight:600;font-family:var(--font);background:#f0ebe6;color:var(--soft)}
+.btn-sm:hover{background:var(--rule)}
+
+#pbody{flex:1;display:flex;overflow:hidden}
+textarea#ed{flex:1;border:none;outline:none;resize:none;font-family:var(--mono);font-size:11.5px;line-height:1.65;padding:18px 20px;background:#1e1e2e;color:#cdd6f4;tab-size:2}
+
+#pv-wrap{width:45%;flex-shrink:0;border-left:1px solid var(--rule);display:flex;flex-direction:column;background:#111}
+.pv-bar{padding:0 13px;height:28px;display:flex;align-items:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;background:#111;border-bottom:1px solid #222;gap:8px}
+.pv-bar a{color:#888;font-size:10px;text-decoration:none;margin-left:auto}
+.pv-bar a:hover{color:#ccc}
+#pv-frame{flex:1;border:none}
+
+#empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#bbb;gap:14px}
+#empty svg{opacity:.35}
+#empty p{font-size:13px;text-align:center;line-height:1.6;max-width:240px}
+
+/* ── OVERLAY ── */
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;display:none;align-items:center;justify-content:center;gap:12px;color:#fff;font-size:14px}
+#ov.on{display:flex}
+.spin{width:20px;height:20px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── TOKEN GATE ── */
+#gate{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:20px;padding:40px}
+#gate h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
+#gate h2 span{color:var(--red)}
+#gate p{color:var(--soft);max-width:440px;text-align:center;line-height:1.6;font-size:13px}
+.gate-form{display:flex;gap:8px;width:100%;max-width:420px}
+.gate-form input{flex:1;padding:9px 13px;border:1px solid var(--rule);border-radius:7px;font-size:13px;font-family:var(--font);outline:none;background:var(--white)}
+.gate-form input:focus{border-color:var(--red)}
+.btn-red{background:var(--red);color:#fff;padding:8px 18px;border-radius:7px;font-size:13px}
+.gate-note{font-size:11px;color:#aaa;max-width:420px;text-align:center;line-height:1.6}
+.gate-note a{color:var(--red)}
+</style>
+</head>
+<body>
+<div id="ov"><div class="spin"></div><span id="ov-msg">Loading…</span></div>
+
+<div id="app">
+  <header>
+    <div class="logo"><div class="logo-pip"></div>Simple Wine · Slide Editor</div>
+    <div class="h-div"></div>
+    <div class="token-row" id="hdr-token" style="display:none">
+      <label>Token</label>
+      <input type="password" class="tok" id="hdr-tok-input" placeholder="ghp_…">
+      <button class="btn btn-ghost" onclick="reconnect()">Reconnect</button>
+    </div>
+    <div class="h-gap"></div>
+    <div class="dot" id="dot"></div>
+    <span id="st">Not connected</span>
+    <button class="btn btn-save" id="save-btn" disabled onclick="saveSlides()">↑ Save &amp; Publish</button>
+  </header>
+
+  <div id="main">
+    <!-- Token gate shown before first load -->
+    <div id="gate">
+      <h2>Slide <span>Editor</span></h2>
+      <p>Enter a GitHub Personal Access Token with <strong>repo</strong> scope to load and save the presentation.</p>
+      <div class="gate-form">
+        <input type="password" id="gate-tok" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+        <button class="btn btn-red" onclick="loadSlides()">Load slides</button>
+      </div>
+      <p class="gate-note">
+        Your token is stored only in your browser's localStorage and sent directly to GitHub's API — never to any third party.<br><br>
+        <a href="https://github.com/settings/tokens/new?scopes=repo&description=SW+Slide+Editor" target="_blank">Create a token →</a>
+      </p>
+    </div>
+
+    <!-- Editor (hidden until loaded) -->
+    <div id="sb" style="display:none">
+      <div class="sb-hd"><h2>Slides</h2><span id="ct">—</span></div>
+      <div id="sl"></div>
+      <button id="add-btn" onclick="addSlide()">+ Add slide</button>
+    </div>
+
+    <div id="panel" style="display:none">
+      <div class="ptb">
+        <h3 id="ptitle">← Select a slide</h3>
+        <div class="ptb-btns" id="ptb-btns" style="display:none">
+          <button class="btn-sm" onclick="dupSlide()">Duplicate</button>
+          <button class="btn-sm" onclick="addDivider()">+ Divider</button>
+        </div>
+        <span class="ptb-hint">Editing section HTML · <kbd style="background:#f0ebe6;padding:2px 5px;border-radius:3px;font-size:10px">⌘S</kbd> to save</span>
+      </div>
+      <div id="pbody">
+        <div id="empty">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <p>Select a slide from the sidebar to start editing its HTML</p>
+        </div>
+        <textarea id="ed" style="display:none" spellcheck="false"></textarea>
+        <div id="pv-wrap" style="display:none">
+          <div class="pv-bar">
+            Preview
+            <a href="https://cowboybebopbebopbbop.github.io/sw_presentation/" target="_blank">Open live ↗</a>
+          </div>
+          <iframe id="pv-frame" title="Slide preview" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>'use strict';
+
+const OWNER  = 'cowboybebopbebopbbop';
+const REPO   = 'sw_presentation';
+const FILE   = 'index.html';
+const BRANCH = 'main';
+
+let token    = localStorage.getItem('sw_tok') || '';
+let fileSha  = '';
+let htmlPre  = '';   // everything before first <section
+let htmlPost = '';   // everything after last </section>
+let slides   = [];
+let activeIdx = -1;
+let dragSrc  = -1;
+let pvTimer  = null;
+
+// ── UTF-8 safe base64 ─────────────────────────────────────────────────────
+const b64dec = b => decodeURIComponent(escape(atob(b.replace(/\n/g,''))));
+const b64enc = s => btoa(unescape(encodeURIComponent(s)));
+const esc    = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+// ── UI helpers ────────────────────────────────────────────────────────────
+function setStatus(msg, kind='') {
+  document.getElementById('st').textContent = msg;
+  document.getElementById('dot').className = 'dot' + (kind ? ' '+kind : '');
+}
+function overlay(msg) {
+  document.getElementById('ov-msg').textContent = msg;
+  document.getElementById('ov').className = 'on';
+}
+function hideOverlay() { document.getElementById('ov').className = ''; }
+
+function showEditor() {
+  document.getElementById('gate').style.display   = 'none';
+  document.getElementById('sb').style.display     = '';
+  document.getElementById('panel').style.display  = '';
+  document.getElementById('hdr-token').style.display = '';
+  if (token) document.getElementById('hdr-tok-input').value = token;
+}
+
+// ── GitHub API ────────────────────────────────────────────────────────────
+const ghHdr = () => ({
+  'Authorization': `Bearer ${token}`,
+  'Accept': 'application/vnd.github+json',
+  'X-GitHub-Api-Version': '2022-11-28'
+});
+
+async function loadSlides() {
+  const inp = document.getElementById('gate-tok');
+  token = (inp ? inp.value.trim() : '') || token;
+  if (!token) { alert('Please enter a GitHub token.'); return; }
+  localStorage.setItem('sw_tok', token);
+
+  overlay('Loading presentation…');
+  setStatus('Loading…');
+  try {
+    const res  = await fetch(
+      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}?ref=${BRANCH}`,
+      { headers: ghHdr() }
+    );
+    if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.message || res.statusText); }
+    const data = await res.json();
+    fileSha    = data.sha;
+    parseHTML(b64dec(data.content));
+    renderList();
+    showEditor();
+    setStatus(`Connected · ${slides.length} slides`, 'ok');
+    document.getElementById('save-btn').disabled = false;
+  } catch(e) {
+    setStatus('Error: ' + e.message, 'err');
+    alert('Failed to load:\n' + e.message);
+  } finally { hideOverlay(); }
+}
+
+async function reconnect() {
+  token = document.getElementById('hdr-tok-input').value.trim();
+  if (!token) { alert('Enter a token first.'); return; }
+  localStorage.setItem('sw_tok', token);
+  await loadSlides();
+}
+
+async function saveSlides() {
+  if (activeIdx >= 0) slides[activeIdx].html = document.getElementById('ed').value;
+  if (!token) { alert('Load presentation first.'); return; }
+  overlay('Saving to GitHub…');
+  setStatus('Saving…');
+  try {
+    const newHTML = rebuildHTML();
+    const res = await fetch(
+      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`,
+      {
+        method: 'PUT',
+        headers: { ...ghHdr(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Update slides via editor',
+          content: b64enc(newHTML),
+          sha: fileSha,
+          branch: BRANCH
+        })
+      }
+    );
+    if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.message || res.statusText); }
+    const data = await res.json();
+    fileSha = data.content.sha;
+    // Re-parse to stay in sync (keeps activeIdx stable if possible)
+    const prevActive = activeIdx;
+    parseHTML(newHTML);
+    renderList();
+    if (prevActive >= 0 && prevActive < slides.length) selectSlide(prevActive);
+    setStatus('Saved ✓  — publishing…', 'ok');
+    setTimeout(() => setStatus('Published ✓', 'ok'), 5000);
+  } catch(e) {
+    setStatus('Save failed', 'err');
+    alert('Save failed:\n' + e.message);
+  } finally { hideOverlay(); }
+}
+
+// ── HTML parsing ──────────────────────────────────────────────────────────
+function parseHTML(html) {
+  const marker = '<div class="slides">';
+  const mPos   = html.indexOf(marker);
+  if (mPos === -1) return;
+
+  const firstSec = html.indexOf('<section', mPos + marker.length);
+  const lastEnd  = html.lastIndexOf('</section>') + 10; // 10 = len('</section>')
+  if (firstSec === -1) return;
+
+  htmlPre  = html.substring(0, firstSec);
+  htmlPost = html.substring(lastEnd);
+
+  // Use DOMParser for metadata extraction
+  const doc   = new DOMParser().parseFromString(html, 'text/html');
+  const secEls = Array.from(doc.querySelectorAll('.reveal .slides > section'));
+
+  slides = secEls.map((el, i) => {
+    const isDivider = el.classList.contains('section-divider');
+    const get = sel => el.querySelector(sel)?.textContent?.replace(/\s+/g,' ').trim() || '';
+    const raw = isDivider
+      ? (get('.sec-title') || get('.sec-num'))
+      : (get('h1') || get('h2') || get('.eyebrow') || `Slide ${i+1}`);
+    return { html: '', label: raw.substring(0, 80), isDivider, id: crypto.randomUUID() };
+  });
+
+  // Extract exact HTML strings from original (preserves formatting, comments inside sections)
+  let pos = htmlPre.length;
+  for (let i = 0; i < slides.length; i++) {
+    const start = html.indexOf('<section', pos);
+    if (start === -1) break;
+    let depth = 0, cur = start;
+    while (cur < html.length) {
+      const nO = html.indexOf('<section', cur + 1);
+      const nC = html.indexOf('</section>', cur);
+      if (nC === -1) break;
+      if (nO !== -1 && nO < nC) { depth++; cur = nO; }
+      else {
+        if (depth === 0) { slides[i].html = html.substring(start, nC + 10); pos = nC + 10; break; }
+        depth--;
+        cur = nC + 1;
+      }
+    }
+  }
+}
+
+function rebuildHTML() {
+  return htmlPre + slides.map(s => s.html).join('\n\n    ') + htmlPost;
+}
+
+// ── Sidebar rendering ─────────────────────────────────────────────────────
+function renderList() {
+  const list = document.getElementById('sl');
+  list.innerHTML = '';
+  slides.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'sc' + (s.isDivider ? ' divider' : '') + (i === activeIdx ? ' active' : '');
+    el.draggable = true;
+    el.innerHTML =
+      `<div class="sc-grip" title="Drag to reorder">⠿</div>
+       <div class="sc-body">
+         <div class="sc-n">${String(i+1).padStart(2,'0')}</div>
+         <div class="sc-lbl" title="${esc(s.label)}">${esc(s.label)}</div>
+         <div class="sc-kind">${s.isDivider ? '◆ Section divider' : '· Content slide'}</div>
+       </div>
+       <div class="sc-del" title="Delete slide" data-del="${i}">✕</div>`;
+
+    el.addEventListener('click', e => {
+      if (e.target.dataset.del !== undefined || e.target.closest('.sc-grip')) return;
+      selectSlide(i);
+    });
+    el.querySelector('[data-del]').addEventListener('click', e => { e.stopPropagation(); delSlide(i); });
+    el.addEventListener('dragstart', e => { dragSrc = i; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    el.addEventListener('dragend', () => { el.classList.remove('dragging'); clearDragOver(); });
+    el.addEventListener('dragover', e => { e.preventDefault(); clearDragOver(); el.classList.add('drag-over'); });
+    el.addEventListener('drop', e => { e.preventDefault(); clearDragOver(); if (dragSrc !== i) reorder(dragSrc, i); });
+    list.appendChild(el);
+  });
+  document.getElementById('ct').textContent = slides.length + ' slides';
+}
+
+function clearDragOver() { document.querySelectorAll('.sc.drag-over').forEach(c => c.classList.remove('drag-over')); }
+
+function selectSlide(idx) {
+  if (activeIdx >= 0 && activeIdx < slides.length) slides[activeIdx].html = document.getElementById('ed').value;
+  activeIdx = idx;
+  const s = slides[idx];
+  document.getElementById('ptitle').textContent = s.label || `Slide ${idx+1}`;
+  const ed = document.getElementById('ed');
+  ed.value = s.html;
+  ed.style.display = '';
+  document.getElementById('empty').style.display = 'none';
+  document.getElementById('pv-wrap').style.display = '';
+  document.getElementById('ptb-btns').style.display = '';
+  renderList();
+  refreshPreview();
+}
+
+function reorder(from, to) {
+  const [item] = slides.splice(from, 1);
+  slides.splice(to, 0, item);
+  if (activeIdx === from) activeIdx = to;
+  else if (activeIdx > from && activeIdx <= to) activeIdx--;
+  else if (activeIdx < from && activeIdx >= to) activeIdx++;
+  renderList();
+}
+
+function delSlide(idx) {
+  if (!confirm(`Delete slide "${slides[idx].label}"?`)) return;
+  slides.splice(idx, 1);
+  if (activeIdx === idx) {
+    activeIdx = -1;
+    document.getElementById('ed').style.display = 'none';
+    document.getElementById('empty').style.display = '';
+    document.getElementById('pv-wrap').style.display = 'none';
+    document.getElementById('ptb-btns').style.display = 'none';
+    document.getElementById('ptitle').textContent = '← Select a slide';
+  } else if (activeIdx > idx) activeIdx--;
+  renderList();
+}
+
+function dupSlide() {
+  if (activeIdx < 0) return;
+  slides[activeIdx].html = document.getElementById('ed').value;
+  const copy = { ...slides[activeIdx], id: crypto.randomUUID(), label: slides[activeIdx].label + ' (copy)' };
+  slides.splice(activeIdx + 1, 0, copy);
+  renderList();
+  selectSlide(activeIdx + 1);
+}
+
+function addSlide() {
+  if (activeIdx >= 0) slides[activeIdx].html = document.getElementById('ed').value;
+  const s = {
+    html: `<section data-background-color="#ffffff" class="bg-paper">\n  <div class="eyebrow anim-up" data-d="0">New section</div>\n  <h2 class="anim-up" data-d="100">New slide title</h2>\n  <p class="lede anim-up" data-d="200">Add your content here.</p>\n</section>`,
+    label: 'New slide', isDivider: false, id: crypto.randomUUID()
+  };
+  slides.push(s);
+  renderList();
+  selectSlide(slides.length - 1);
+  document.getElementById('sl').lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function addDivider() {
+  if (activeIdx >= 0) slides[activeIdx].html = document.getElementById('ed').value;
+  const n = slides.filter(s => s.isDivider).length + 1;
+  const s = {
+    html: `<section data-background-color="#A61D47" class="section-divider">\n  <div class="sec-num anim-up" data-d="0">Section ${String(n).padStart(2,'0')}</div>\n  <h2 class="sec-title anim-up" data-d="120">Section <em>title</em></h2>\n  <div class="sec-rule anim-up" data-d="260"></div>\n</section>`,
+    label: 'Section divider', isDivider: true, id: crypto.randomUUID()
+  };
+  const insertAt = activeIdx >= 0 ? activeIdx + 1 : slides.length;
+  slides.splice(insertAt, 0, s);
+  renderList();
+  selectSlide(insertAt);
+}
+
+// ── Preview ───────────────────────────────────────────────────────────────
+document.getElementById('ed').addEventListener('input', () => {
+  if (activeIdx >= 0) slides[activeIdx].html = document.getElementById('ed').value;
+  clearTimeout(pvTimer);
+  pvTimer = setTimeout(refreshPreview, 700);
+});
+
+function getCSS() {
+  const m = (htmlPre + htmlPost).match(/<style>([\s\S]*?)<\/style>/);
+  return m ? m[1] : '';
+}
+
+function refreshPreview() {
+  if (activeIdx < 0) return;
+  const sectionHTML = slides[activeIdx].html;
+  const css = getCSS();
+  const tpl = `<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700;1,900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<style>${css}
+html,body{margin:0;padding:0;overflow:hidden;background:#fff}
+.reveal,.reveal .slides{width:1280px!important;height:720px!important;position:absolute!important;top:0;left:0}
+.reveal .slides>section{display:block!important;position:absolute!important;opacity:1!important;transform:none!important;visibility:visible!important;top:0;left:0;width:1280px;height:720px}
+.anim-up,[data-d]{opacity:1!important;transform:none!important;transition:none!important}
+</style></head>
+<body>
+<script>(function(){
+  function scale(){
+    var s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+    var d=document.querySelector('.reveal');
+    if(d){d.style.transform='scale('+s+')';d.style.transformOrigin='0 0';}
+  }
+  window.addEventListener('resize',scale);
+  document.addEventListener('DOMContentLoaded',function(){setTimeout(scale,50)});
+}());<\/script>
+<div class="reveal"><div class="slides">${sectionHTML}</div></div>
+</body></html>`;
+  document.getElementById('pv-frame').srcdoc = tpl;
+}
+
+// ── Keyboard shortcut ─────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault();
+    if (!document.getElementById('save-btn').disabled) saveSlides();
+  }
+});
+</script>
+</body>
+</html>
