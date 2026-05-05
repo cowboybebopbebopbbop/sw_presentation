@@ -1,0 +1,1366 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simple Wine — Контент-студия на AI</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700;1,900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+
+<style>
+  html, body { margin: 0; padding: 0; }
+  :root {
+    --sw-burgundy: #A61D47;
+    --sw-burgundy-deep: #7d1535;
+    --sw-cream: #ffffff;
+    --sw-paper: #ffffff;
+    --sw-ink: #1a1413;
+    --sw-ink-soft: #5a5151;
+    --sw-rule: #e8e4df;
+    --sw-gold: #b08648;
+
+    --font-display: 'Playfair Display', 'Times New Roman', serif;
+    --font-body: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif;
+  }
+
+  .reveal { font-family: var(--font-body); font-size: 22px; font-weight: 400; color: var(--sw-ink); }
+  .reveal .slides { text-align: left; }
+  .reveal .slides section { padding: 64px 88px; height: 100%; box-sizing: border-box; }
+
+  .reveal h1, .reveal h2, .reveal h3 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: var(--sw-ink);
+    text-transform: none;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    margin: 0 0 0.5em 0;
+  }
+  .reveal h1 { font-size: 4.4rem; font-weight: 900; letter-spacing: -0.015em; }
+  .reveal h2 { font-size: 2.9rem; font-weight: 800; letter-spacing: -0.012em; }
+  .reveal h3 { font-size: 1.4rem; font-weight: 700; }
+  .reveal p  { line-height: 1.6; margin: 0 0 0.8em 0; font-weight: 400; }
+  .reveal strong { font-weight: 700; color: var(--sw-ink); }
+
+  .bg-paper { background: var(--sw-paper); }
+  .bg-cream { background: var(--sw-cream); }
+  .bg-burgundy { background: var(--sw-burgundy); color: var(--sw-cream); }
+  .bg-burgundy h1, .bg-burgundy h2, .bg-burgundy h3 { color: var(--sw-cream); }
+
+  .eyebrow {
+    font-family: var(--font-body); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--sw-burgundy); margin-bottom: 30px;
+  }
+  .lede { font-size: 1.15rem; font-weight: 400; color: var(--sw-ink-soft); max-width: 820px; line-height: 1.5; }
+
+  .title-slide { display: block; padding-top: 86px !important; position: relative; }
+  .title-slide h1 { font-size: 4.6rem; font-weight: 900; letter-spacing: -0.02em; line-height: 0.95; margin-bottom: 22px; color: var(--sw-ink); }
+  .title-slide h1 em { font-style: italic; font-weight: 500; color: var(--sw-burgundy); letter-spacing: -0.01em; }
+  .title-slide .sub { font-family: var(--font-body); font-style: normal; font-weight: 400; font-size: 1.15rem; line-height: 1.5; color: var(--sw-ink-soft); max-width: 760px; margin-bottom: 36px; }
+  .title-slide .metrics { margin-top: 0; }
+  .title-slide .metric .num { font-size: 3.2rem; }
+  .title-slide .footnote { margin-top: 28px; }
+
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-top: 44px; }
+  .metric { border-top: 2px solid var(--sw-rule); padding-top: 22px; }
+  .metric .num { font-family: var(--font-display); font-weight: 900; font-size: 4rem; letter-spacing: -0.015em; line-height: 1; color: var(--sw-burgundy); margin-bottom: 14px; }
+  .metric .num em { font-style: normal; font-weight: 500; font-size: 1.6rem; color: var(--sw-ink-soft); margin-left: 4px; letter-spacing: 0; }
+  .metric .label { font-size: 11px; color: var(--sw-ink); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .metric .desc { font-size: 13px; font-weight: 400; color: var(--sw-ink-soft); line-height: 1.5; }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 36px; border: 1px solid var(--sw-rule); }
+  .compare > div { padding: 22px 28px; }
+  .compare .now { border-right: 1px solid var(--sw-rule); }
+  .compare .with { background: var(--sw-burgundy); color: var(--sw-cream); }
+  .compare h3 { font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; margin-bottom: 14px; }
+  .compare .now h3 { color: var(--sw-ink-soft); }
+  .compare .with h3 { color: rgba(255,255,255,0.85); }
+  .compare .head { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; letter-spacing: -0.012em; line-height: 1.2; margin-bottom: 0; }
+  .compare ul { list-style: none; padding: 0; margin: 14px 0 0 0; }
+  .compare li { padding: 9px 0; font-size: 14px; font-weight: 500; line-height: 1.5; border-top: 1px solid rgba(0,0,0,0.08); }
+  .compare .with li { border-top-color: rgba(255,255,255,0.18); }
+
+  .flow { display: flex; margin-top: 36px; gap: 3px; }
+  .flow-step { flex: 1; background: #f0ebe6; padding: 13px 20px 13px 28px; clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 14px 50%); }
+  .flow-step:first-child { clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%); padding-left: 16px; }
+  .flow-step:last-child { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 14px 50%); }
+  .flow-step .lbl { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--sw-burgundy); margin-bottom: 8px; font-weight: 700; }
+  .flow-step .name { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; letter-spacing: -0.005em; line-height: 1.2; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+  .col { background: #fafafa; border-top: 3px solid var(--sw-burgundy); padding: 22px 26px; }
+  .col h3 { font-family: var(--font-body); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: var(--sw-burgundy); margin-bottom: 16px; }
+  .col p, .col li { font-size: 14px; font-weight: 400; color: var(--sw-ink); line-height: 1.6; }
+  .col ul { padding-left: 16px; margin: 0; }
+  .col li { margin-bottom: 9px; }
+
+  .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 72px; }
+  .step { background: #fafafa; border-left: 3px solid var(--sw-burgundy); padding: 32px 36px; }
+  .step .num { font-family: var(--font-display); font-weight: 900; font-size: 2.4rem; letter-spacing: -0.02em; color: var(--sw-burgundy); line-height: 1; margin-bottom: 14px; }
+  .step h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; letter-spacing: -0.01em; color: var(--sw-ink); margin-bottom: 16px; }
+  .step p, .step li { font-size: 14px; font-weight: 400; color: var(--sw-ink-soft); line-height: 1.6; }
+  .step ul { padding-left: 18px; margin: 12px 0 0 0; }
+  .step li { margin-bottom: 8px; }
+  .step strong { color: var(--sw-ink); font-weight: 700; }
+
+  .footnote { font-size: 14px; font-weight: 400; font-style: normal; color: var(--sw-ink-soft); line-height: 1.6; max-width: 980px; margin-top: 52px; }
+  .bg-burgundy .footnote { color: var(--sw-cream); opacity: 0.6; }
+
+  .stamp { font-family: var(--font-display); font-style: normal; font-weight: 800; color: var(--sw-burgundy); font-size: 1.15rem; letter-spacing: -0.01em; }
+
+  /* ============================================================
+     ANIMATION DIRECTION
+     Editorial rhythm: fade + 8–16px translate, no bounce.
+     Easing: cubic-bezier(.2,.7,.2,1). Stagger 60–90ms.
+     Only `transform` and `opacity` are animated.
+     ============================================================ */
+  :root {
+    --ease-paper: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --dur-s: 380ms;
+    --dur-m: 550ms;
+    --dur-l: 700ms;
+  }
+
+  /* Base hidden state for any animatable element on the active slide */
+  .reveal .slides section .anim,
+  .reveal .slides section .anim-up,
+  .reveal .slides section .anim-right,
+  .reveal .slides section .anim-left {
+    opacity: 0;
+    will-change: transform, opacity;
+    transition:
+      opacity var(--dur-m) var(--ease-paper),
+      transform var(--dur-m) var(--ease-paper);
+  }
+  .reveal .slides section .anim-up    { transform: translateY(12px); }
+  .reveal .slides section .anim-right { transform: translateX(-16px); }
+  .reveal .slides section .anim-left  { transform: translateX(16px); }
+
+  /* Active state — added by JS once slide becomes present */
+  .reveal .slides section.present .anim.is-in,
+  .reveal .slides section.present .anim-up.is-in,
+  .reveal .slides section.present .anim-right.is-in,
+  .reveal .slides section.present .anim-left.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Editorial top-rule reveal for metric tiles */
+  .metric { position: relative; border-top-color: transparent; }
+  .metric::before {
+    content: "";
+    position: absolute;
+    top: -2px; left: 0;
+    height: 2px; width: 100%;
+    background: var(--sw-rule);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 420ms var(--ease-paper);
+  }
+  .present .metric.is-in::before { transform: scaleX(1); }
+
+  /* Burgundy "with" column — paint sweep before content */
+  .compare .with {
+    position: relative;
+    background: transparent;
+    color: var(--sw-cream);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .compare .with::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: var(--sw-burgundy);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 480ms var(--ease-paper);
+    z-index: -1;
+  }
+  .present .compare .with.is-in::before { transform: scaleX(1); }
+  .compare .with > * {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity var(--dur-m) var(--ease-paper),
+      transform var(--dur-m) var(--ease-paper);
+    transition-delay: 320ms;
+  }
+  .compare .with.is-in > * { opacity: 1; transform: none; }
+
+  /* Flow steps — running light along the conveyor */
+  .flow-step {
+    opacity: 0;
+    transform: translateX(10px);
+    transition:
+      opacity var(--dur-m) var(--ease-paper),
+      transform var(--dur-m) var(--ease-paper),
+      filter 320ms var(--ease-paper);
+    filter: none;
+  }
+  .present .flow.is-in .flow-step.is-in { opacity: 1; transform: none; }
+  .present .flow.is-in .flow-step.is-dim { opacity: 0.62; }
+
+  /* Title slide — brief mockup floats in from right with a soft breath */
+  .title-mock {
+    opacity: 0;
+    transform: translateX(16px);
+    transition:
+      opacity 620ms var(--ease-paper) 520ms,
+      transform 620ms var(--ease-paper) 520ms;
+  }
+  .present .title-mock.is-in { opacity: 1; transform: none; }
+
+  /* Soft breathing pulse on the burgundy "Создать" CTA inside the mock.
+     Only opacity changes — no layout, no shadow repaint. */
+  @keyframes sw-breath {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.78; }
+  }
+  .title-mock .mock-cta {
+    animation: sw-breath 4.6s ease-in-out infinite;
+    animation-delay: 1.6s;
+  }
+
+  /* Format chips inside the brief mock — rotating highlight */
+  .title-mock .chip {
+    border-radius: 20px;
+    padding: 4px 7px;
+    font-size: 10px;
+    color: #5a5151;
+    font-weight: 400;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    transition:
+      background-color 320ms var(--ease-paper),
+      color 320ms var(--ease-paper),
+      font-weight 0ms;
+  }
+  .title-mock .chip.is-active {
+    background: #f7dfe7;
+    color: var(--sw-burgundy);
+    font-weight: 700;
+  }
+
+  /* Count-up cells — keep layout stable while JS ticks the number */
+  .metric .num .count { font-variant-numeric: tabular-nums; }
+
+  /* Reduced motion — kill everything, show final state instantly */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal .slides section .anim,
+    .reveal .slides section .anim-up,
+    .reveal .slides section .anim-right,
+    .reveal .slides section .anim-left,
+    .compare .with > *,
+    .flow-step,
+    .title-mock,
+    .title-mock .mock-cta {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+      transition: none !important;
+    }
+    .metric::before,
+    .compare .with::before { transform: scaleX(1) !important; transition: none !important; }
+  }
+
+  /* ============================================================
+     NEW SECTIONS — pre-sales expansion (positioning, comparison,
+     security, pricing, pilot variants). Reuses base palette & rhythm.
+     ============================================================ */
+
+  /* Compact dense slide — denser type to fit complex content in 720px */
+  .reveal .slides section.dense { padding: 50px 88px; }
+  .reveal .slides section.dense h2 { font-size: 2.1rem; margin-bottom: 0.25em; line-height: 1.05; }
+  .reveal .slides section.dense .lede { font-size: 1rem; max-width: 940px; line-height: 1.5; }
+
+  /* Generic audit-style comparison table */
+  .audit-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+  .audit-table th, .audit-table td { padding: 8px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--sw-rule); line-height: 1.4; font-weight: 400; }
+  .audit-table thead th { font-family: var(--font-body); font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--sw-ink-soft); border-bottom: 2px solid var(--sw-ink); padding-bottom: 11px; }
+  .audit-table th:first-child, .audit-table td:first-child { font-weight: 600; color: var(--sw-ink); }
+  .audit-table .col-us { background: rgba(166, 29, 71, 0.06); }
+  .audit-table thead th.col-us { background: var(--sw-burgundy); color: #fff; border-bottom-color: var(--sw-burgundy-deep); }
+  .audit-table tbody tr:hover td { background: #fafafa; }
+  .audit-table tbody tr:hover td.col-us { background: rgba(166, 29, 71, 0.10); }
+  .audit-table .ok { color: var(--sw-burgundy); font-weight: 700; }
+  .audit-table .no { color: #b8b0a8; }
+
+  /* Section: Позиционирование */
+  .pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 26px; border: 1px solid var(--sw-rule); }
+  .pos-grid > div { padding: 20px 24px; }
+  .pos-grid .pos-not { border-right: 1px solid var(--sw-rule); background: #fafafa; }
+  .pos-grid h3 { font-family: var(--font-body); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: var(--sw-ink-soft); margin-bottom: 12px; }
+  .pos-grid .pos-are h3 { color: var(--sw-burgundy); }
+  .pos-grid ul { list-style: none; padding: 0; margin: 0; }
+  .pos-grid li { padding: 7px 0; font-size: 12.5px; line-height: 1.45; border-top: 1px solid rgba(0,0,0,0.07); font-weight: 500; }
+  .pos-grid li:first-child { border-top: 0; }
+
+  .pos-claim { margin-top: 22px; padding: 18px 24px; border-left: 3px solid var(--sw-burgundy); background: #fafafa; font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 1.35rem; line-height: 1.3; color: var(--sw-ink); }
+
+  .pos-fit { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 18px; }
+  .pos-fit .col h3 { color: var(--sw-burgundy); }
+  .pos-fit .col.no h3 { color: var(--sw-ink-soft); }
+
+  /* Section: Сравнение — dual flow */
+  .flow-row { margin-top: 18px; }
+  .flow-row .flow-label { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 700; color: var(--sw-ink-soft); margin-bottom: 4px; }
+  .flow-row.is-us .flow-label { color: var(--sw-burgundy); }
+  .flow-row .flow { margin-top: 4px; }
+  .flow-row.is-them .flow-step { background: #f4f0eb; }
+  .flow-row.is-them .flow-step .lbl { color: #b54040; }
+  .flow-row.is-us .flow-step { background: var(--sw-burgundy); }
+  .flow-row.is-us .flow-step .lbl { color: rgba(255,255,255,0.78); }
+  .flow-row.is-us .flow-step .name { color: #fff; }
+  .flow-summary { font-size: 11.5px; color: var(--sw-ink-soft); margin-top: 8px; font-weight: 500; }
+  .flow-summary strong { color: var(--sw-burgundy); }
+
+  /* Section: Безопасность — карта данных */
+  .data-map { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; align-items: start; }
+  .data-col { padding: 18px 22px; background: #fafafa; border-top: 3px solid var(--sw-rule); }
+  .data-col.in { border-top-color: var(--sw-burgundy); background: rgba(166,29,71,0.04); }
+  .data-col h3 { font-family: var(--font-body); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.28em; color: var(--sw-burgundy); margin-bottom: 12px; }
+  .data-col.out h3 { color: var(--sw-ink-soft); }
+  .data-col ul { padding-left: 18px; margin: 0; }
+  .data-col li { font-size: 12.5px; line-height: 1.55; padding: 3px 0; }
+
+  .data-pipe { margin-top: 22px; padding: 16px 22px; background: #1a1413; color: #fff; font-family: 'SFMono-Regular', Consolas, 'Courier New', monospace; font-size: 11.5px; line-height: 1.85; border-radius: 2px; }
+  .data-pipe .arrow { color: var(--sw-gold); font-weight: 700; }
+  .data-pipe .meta { color: #b8b0a8; font-size: 10px; letter-spacing: 0.06em; }
+
+  /* Section: Безопасность — три уровня контура */
+  .tier-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  .tier-card { background: #fafafa; border-top: 3px solid var(--sw-rule); padding: 20px 22px; }
+  .tier-card.recommended { border-top-color: var(--sw-burgundy); background: rgba(166,29,71,0.04); }
+  .tier-card .tier-label { font-size: 9.5px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 700; color: var(--sw-burgundy); margin-bottom: 8px; }
+  .tier-card h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; margin-bottom: 12px; line-height: 1.2; }
+  .tier-card ul { padding-left: 16px; margin: 0; }
+  .tier-card li { font-size: 11.5px; line-height: 1.55; padding: 3px 0; }
+  .tier-card .when { font-size: 10.5px; color: var(--sw-ink-soft); margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--sw-rule); font-weight: 600; letter-spacing: 0.04em; }
+
+  /* Section: Цена — якоря и сценарии */
+  .price-anchors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 22px; }
+  .price-anchors .metric { border-top: 2px solid var(--sw-rule); padding-top: 16px; }
+  .price-anchors .metric .num { font-size: 2.4rem; }
+
+  .scenario-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  .scenario-card { background: #fafafa; border: 1px solid var(--sw-rule); padding: 18px 20px; }
+  .scenario-card.recommended { border: 2px solid var(--sw-burgundy); background: #fff; }
+  .scenario-card .scn-label { font-size: 9.5px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 700; color: var(--sw-ink-soft); margin-bottom: 6px; }
+  .scenario-card.recommended .scn-label { color: var(--sw-burgundy); }
+  .scenario-card h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; margin-bottom: 10px; line-height: 1.2; }
+  .scenario-card ul { padding-left: 16px; margin: 0 0 10px 0; }
+  .scenario-card li { font-size: 11.5px; line-height: 1.5; padding: 2px 0; color: var(--sw-ink-soft); }
+  .scenario-card .total { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--sw-rule); font-family: var(--font-display); font-weight: 900; font-size: 1.4rem; color: var(--sw-burgundy); line-height: 1.1; }
+  .scenario-card .total .total-lbl { display: block; font-family: var(--font-body); font-size: 9.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sw-ink-soft); margin-bottom: 3px; }
+
+  /* Section: Пилот — карточки A/B/C */
+  .pilot-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  .pilot-card { background: #fafafa; border-top: 3px solid var(--sw-rule); padding: 20px 22px; position: relative; }
+  .pilot-card.recommended { border-top: 3px solid var(--sw-burgundy); background: #fff; box-shadow: 0 0 0 2px var(--sw-burgundy) inset; padding-top: 36px; }
+  .pilot-card .ribbon { position: absolute; top: 0; right: 0; background: var(--sw-burgundy); color: #fff; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; padding: 5px 10px; }
+  .pilot-card .tier { font-size: 9.5px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 700; color: var(--sw-burgundy); margin-bottom: 6px; }
+  .pilot-card h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; margin-bottom: 12px; line-height: 1.15; }
+  .pilot-card .price { font-family: var(--font-display); font-weight: 900; font-size: 1.9rem; color: var(--sw-burgundy); line-height: 1; margin-bottom: 4px; letter-spacing: -0.01em; }
+  .pilot-card .price-sub { font-size: 10px; color: var(--sw-ink-soft); letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; margin-bottom: 14px; }
+  .pilot-card .field { margin-bottom: 8px; font-size: 11.5px; line-height: 1.45; }
+  .pilot-card .field .k { display: block; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: var(--sw-ink-soft); margin-bottom: 2px; }
+  .pilot-card .field .v { color: var(--sw-ink); font-weight: 500; }
+  .pilot-card ul { padding-left: 14px; margin: 3px 0 0 0; }
+  .pilot-card li { font-size: 11.5px; line-height: 1.45; padding: 2px 0; color: var(--sw-ink); }
+  .pilot-card .nope li { color: #8a8278; }
+
+  /* Section: Пилот — обоснование выбора (5.2) */
+  .reco-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 26px; }
+  .reco-card { padding: 22px 26px; background: #fafafa; border-left: 3px solid var(--sw-burgundy); }
+  .reco-card .reco-num { font-family: var(--font-display); font-weight: 900; font-size: 2.2rem; color: var(--sw-burgundy); line-height: 1; margin-bottom: 10px; }
+  .reco-card h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; margin-bottom: 10px; line-height: 1.2; }
+  .reco-card p { font-size: 12.5px; line-height: 1.55; color: var(--sw-ink-soft); margin: 0 0 6px 0; }
+  .reco-card ul { padding-left: 16px; margin: 6px 0 0 0; }
+  .reco-card li { font-size: 12px; line-height: 1.5; padding: 2px 0; color: var(--sw-ink-soft); }
+  .reco-not { margin-top: 22px; padding: 16px 22px; background: #fff; border: 1px dashed var(--sw-rule); }
+  .reco-not h3 { font-family: var(--font-body); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: var(--sw-ink-soft); margin-bottom: 8px; }
+  .reco-not ul { padding-left: 18px; margin: 0; columns: 2; column-gap: 32px; }
+  .reco-not li { font-size: 12px; line-height: 1.55; padding: 2px 0; color: var(--sw-ink); break-inside: avoid; }
+
+  /* Platform chips — strip of currently-running pipelines */
+  .platform-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; padding: 18px 22px; background: #faf7f3; border-left: 3px solid var(--sw-burgundy); }
+  .platform-chips .chips-label { font-family: var(--font-body); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.28em; color: var(--sw-ink-soft); width: 100%; margin-bottom: 4px; }
+  .platform-chips .pchip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: #fff; border: 1px solid var(--sw-rule); border-radius: 999px; font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--sw-ink); }
+  .platform-chips .pchip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sw-burgundy); }
+  .platform-chips .pchip.is-next { border-style: dashed; color: var(--sw-ink-soft); background: transparent; }
+  .platform-chips .pchip.is-next .dot { background: var(--sw-ink-soft); opacity: 0.4; }
+
+  /* Process comparison — current SEO flow vs platform flow */
+  .process-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-family: var(--font-body); font-size: 12.5px; }
+  .process-table thead th { padding: 10px 12px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.28em; color: var(--sw-ink-soft); border-bottom: 2px solid var(--sw-rule); background: transparent; }
+  .process-table thead th.col-us { color: var(--sw-burgundy); }
+  .process-table tbody td { padding: 12px 12px; vertical-align: top; border-bottom: 1px solid var(--sw-rule); line-height: 1.5; color: var(--sw-ink); }
+  .process-table tbody td:first-child { width: 28%; font-weight: 600; color: var(--sw-ink); }
+  .process-table tbody td:nth-child(2) { width: 36%; color: var(--sw-ink-soft); }
+  .process-table tbody td.col-us { width: 36%; background: #faf7f3; border-left: 3px solid var(--sw-burgundy); padding-left: 16px; color: var(--sw-ink); font-weight: 500; }
+  .process-table tfoot td { padding: 14px 12px; border-top: 2px solid var(--sw-burgundy); font-family: var(--font-body); font-weight: 700; }
+  .process-table tfoot td.col-us { background: #faf7f3; border-left: 3px solid var(--sw-burgundy); padding-left: 16px; color: var(--sw-burgundy); }
+  .process-table tfoot td:first-child { color: var(--sw-ink-soft); font-size: 10px; text-transform: uppercase; letter-spacing: 0.28em; }
+
+  .process-totals { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px; }
+  .process-totals .ptot { padding: 22px 26px; border: 1px solid var(--sw-rule); background: #fff; }
+  .process-totals .ptot.is-us { background: #faf7f3; border-color: var(--sw-burgundy); border-left-width: 4px; }
+  .process-totals .ptot .lbl { font-family: var(--font-body); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.28em; color: var(--sw-ink-soft); margin-bottom: 10px; }
+  .process-totals .ptot.is-us .lbl { color: var(--sw-burgundy); }
+  .process-totals .ptot .big { font-family: var(--font-display); font-size: 1.7rem; line-height: 1.2; color: var(--sw-ink); margin-bottom: 6px; }
+  .process-totals .ptot.is-us .big { color: var(--sw-burgundy); }
+  .process-totals .ptot .sub { font-family: var(--font-body); font-size: 12px; color: var(--sw-ink-soft); line-height: 1.5; }
+
+  .platform-claim { margin-top: 28px; padding: 22px 28px; background: var(--sw-burgundy); color: #fff; font-family: var(--font-display); font-style: italic; font-size: 1.25rem; line-height: 1.45; text-align: center; }
+  .platform-claim em { color: #f4e0c8; font-style: normal; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+    <!-- 1. TITLE -->
+    <section data-background-color="#ffffff" class="bg-paper title-slide">
+      <div class="title-mock" data-d="0" style='position:absolute;top:44px;right:160px;width:210px;font-family:Inter,-apple-system,sans-serif;z-index:10;user-select:none;'>
+        <div style='background:#fff;border-radius:12px;padding:11px 11px 10px;box-shadow:0 6px 28px rgba(26,20,19,0.11);'>
+          <div style='font-size:11px;font-weight:600;color:#1a1413;margin-bottom:8px;'>Бриф</div>
+          <div style='border:1.5px dashed #cfc8c2;border-radius:8px;padding:14px;text-align:center;margin-bottom:10px;background:#faf9f7;'>
+            <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#a09890' stroke-width='1.8' style='display:block;margin:0 auto 5px;'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='17 8 12 3 7 8'/><line x1='12' y1='3' x2='12' y2='15'/></svg>
+            <div style='font-size:11.5px;font-weight:500;color:#1a1413;margin-bottom:3px;'>Загрузите бриф</div>
+            <div style='font-size:10px;color:#A61D47;font-weight:500;'>.txt · .md · .docx · .xlsx</div>
+          </div>
+          <div style='background:#faf9f7;border-radius:8px;padding:10px;margin-bottom:10px;'>
+            <div style='display:grid;grid-template-columns:repeat(2,1fr);gap:5px;'>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2'><rect x='2' y='7' width='20' height='14' rx='2'/><path d='M16 3H8'/></svg>Мульти</div>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/></svg>Email</div>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><rect x='3' y='3' width='18' height='18' rx='2'/><circle cx='8.5' cy='8.5' r='1.5'/><path d='m21 15-5-5L5 21'/></svg>ББ</div>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><rect x='3' y='3' width='18' height='18' rx='2'/><circle cx='8.5' cy='8.5' r='1.5'/><path d='m21 15-5-5L5 21'/></svg>МБ</div>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M18 8h1a4 4 0 0 1 0 8h-1'/><path d='M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z'/><line x1='6' y1='1' x2='6' y2='4'/><line x1='10' y1='1' x2='10' y2='4'/><line x1='14' y1='1' x2='14' y2='4'/></svg>Карточка</div>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.35-4.35'/></svg>SEO</div>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/></svg>Бренд</div>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z'/><polyline points='14 2 14 8 20 8'/></svg>Статья</div>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='m3 11 19-9-9 19-2-8-8-2z'/></svg>Медийка</div>
+              <div class='chip'><svg width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M12 22V12'/><path d='M5 12H2a10 10 0 0 0 20 0h-3'/><circle cx='12' cy='5' r='3'/></svg>НФ</div>
+            </div>
+          </div>
+          <div style='background:#A61D47;border-radius:22px;padding:10px;font-size:12.5px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;' class='mock-cta'><svg width='11' height='11' viewBox='0 0 24 24' fill='white'><polygon points='5 3 19 12 5 21 5 3'/></svg>Создать</div>
+        </div>
+      </div>
+      <h1>
+        <span class="anim-up" data-d="100">Контент-</span><br/>
+        <span class="anim-up" data-d="220" style="display:inline-block">студия</span>
+      </h1>
+      <p class="sub anim-up" data-d="380">6&nbsp;месяцев настройки: от&nbsp;GPT-бота до&nbsp;собственной мультиагентной системы.</p>
+
+      <div class="metrics">
+        <div class="metric anim-up" data-d="780">
+          <div class="num"><span class="count" data-count="10" data-suffix="">0</span><em>+</em></div>
+          <div class="label">Форматов по стандартам</div>
+          <div class="desc">От&nbsp;SEO-статей до&nbsp;баннеров и&nbsp;промо</div>
+        </div>
+        <div class="metric anim-up" data-d="870">
+          <div class="num"><span class="count" data-count="65">0</span><em>%</em></div>
+          <div class="label">Ускорение по статьям</div>
+          <div class="desc">7&nbsp;часов → 2,5&nbsp;часа с&nbsp;редактурой</div>
+        </div>
+        <div class="metric anim-up" data-d="960">
+          <div class="num"><span class="count" data-count="80">0</span><em>%</em></div>
+          <div class="label">Ускорение по баннерам</div>
+          <div class="desc">2&nbsp;часа → 20&nbsp;минут с&nbsp;финализацией</div>
+        </div>
+        <div class="metric anim-up" data-d="1050">
+          <div class="num"><span class="count" data-count="100">0</span><em>%</em></div>
+          <div class="label">Текстов принято</div>
+          <div class="desc">Всё согласовывается и&nbsp;ротируется на&nbsp;главной</div>
+        </div>
+      </div>
+
+      <p class="footnote anim-up" data-d="1500">Система <strong>протестирована</strong> на&nbsp;текущей загрузке контент-отдела: настроена на&nbsp;наших требованиях и&nbsp;ограничениях, может генерировать больше вариантов для А/Б + обучаться на&nbsp;правках от&nbsp;редактора — но&nbsp;также легко масштабируется (новые форматы\тип контента и&nbsp;тд).</p>
+    </section>
+
+    <!-- 2. БОЛЬШЕ ЗАДАЧ -->
+    <section data-background-color="#ffffff" class="bg-paper">
+      <div class="eyebrow anim-up" data-d="0">Больше задач — той же командой</div>
+
+      <div class="compare anim-up" data-d="180">
+        <div class="now anim-up" data-d="320">
+          <h3>Сейчас</h3>
+          <div class="head">Команда закрывает только текущий пул задач</div>
+          <ul>
+            <li>Каждый копир загружен на&nbsp;40&nbsp;часов в&nbsp;неделю</li>
+            <li>Для масштабных тестов, новых форматов и&nbsp;каналов всегда придется искать компромиссы</li>
+          </ul>
+        </div>
+        <div class="with" data-d="700">
+          <h3>С системой</h3>
+          <div class="head">Сокращаем рутину в&nbsp;3–5&nbsp;раз —<br>и&nbsp;высвобождаем ресурс</div>
+          <ul>
+            <li>Буст SEO-контента</li>
+            <li>Контент для&nbsp;ЛК SW&nbsp;/ Prive&nbsp;/ сотрудников</li>
+            <li>Развитие блога в&nbsp;owned медиа</li>
+            <li>Генерация визуалов и&nbsp;видео</li>
+            <li>Новые форматы, A/B-тесты, etc.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="footnote anim-up" data-d="1500" style="margin-top:36px">Система снижает рутину и&nbsp;даёт время на&nbsp;то, что AI не&nbsp;умеет: креатив, качественную редактуру, понимание пользователя. Без&nbsp;людей это просто генератор текста, но&nbsp;с людьми она становится инструментом, который работает на&nbsp;стратегию.</p>
+    </section>
+
+    <!-- 3. КАК РАБОТАЕТ -->
+    <section data-background-color="#ffffff" class="bg-paper">
+      <div class="eyebrow anim-up" data-d="0">Как работает система</div>
+
+      <div class="flow" data-d="200" data-flow-autoplay="1">
+        <div class="flow-step"><div class="lbl">01</div><div class="name">Бриф</div></div>
+        <div class="flow-step"><div class="lbl">02</div><div class="name">Агент-аналитик</div></div>
+        <div class="flow-step"><div class="lbl">03</div><div class="name">Агенты-генераторы</div></div>
+        <div class="flow-step"><div class="lbl">04</div><div class="name">Валидатор (ToV, комплаенс)</div></div>
+        <div class="flow-step"><div class="lbl">05</div><div class="name">Готовые тексты</div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="col anim-up" data-d="1900">
+          <h3>Безопасность</h3>
+          <ul>
+            <li>Работаем в&nbsp;браузере без&nbsp;серверной части</li>
+            <li>Данные хранятся локально на&nbsp;ПК сотрудника (нет связи даже между&nbsp;ПК)</li>
+            <li>ПД и&nbsp;метрики не&nbsp;покидают контур</li>
+            <li>Текст брифа отправляется* в Anthropic через защищенный HTTPS. Корпданные не используются для обучения моделей (прописано в Enterprise Terms)</li>
+          </ul>
+        </div>
+        <div class="col anim-up" data-d="1900">
+          <h3>Почему не разрабы</h3>
+          <ul>
+            <li>Нам нужна система специализированных агентов с&nbsp;редполитикой и&nbsp;ToV внутри</li>
+            <li>Разработка аналога с&nbsp;нуля: 6–12&nbsp;месяцев + разраб, закреплённый за&nbsp;контент-отделом</li>
+            <li>По факту дороже и&nbsp;дольше, чем&nbsp;готовое решение, которое уже работает 6+&nbsp;месяцев</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="footnote anim-up" data-d="2300" style="margin-top:52px">* В&nbsp;том или&nbsp;ином формате AI-инструменты уже стали частью контент-производства — вопрос в&nbsp;том, как&nbsp;обеспечить контроль и&nbsp;безопасность. Потому что банальная выгрузка брифов в&nbsp;ChatGPT не&nbsp;даёт таких гарантий.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 4.1 ПОЗИЦИОНИРОВАНИЕ — ПЛАТФОРМА, НЕ ЧАТБОТ                  -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Позиционирование</div>
+      <h2 class="anim-up" data-d="100">Платформа для&nbsp;контент-производства, не&nbsp;очередной чатбот</h2>
+      <p class="lede anim-up" data-d="200">SimpleWine&nbsp;Studio — это <strong>движок</strong>, на&nbsp;котором уже работают пять разных продуктовых пайплайнов. Каждый новый — это подключённый агент и&nbsp;валидатор, а&nbsp;не&nbsp;«ещё один промпт в&nbsp;окне».</p>
+
+      <div class="pos-grid anim-up" data-d="320">
+        <div class="pos-not">
+          <h3>Чатбот&nbsp;/ подписка</h3>
+          <ul>
+            <li>Один шаг: запрос → ответ</li>
+            <li>Каждый формат — заново копи-пейст</li>
+            <li>Связь между шагами держит человек</li>
+            <li>Качество = качество промпта в&nbsp;моменте</li>
+            <li>Масштабирование = больше людей перед окном чата</li>
+          </ul>
+        </div>
+        <div class="pos-are">
+          <h3>SimpleWine&nbsp;Studio как платформа</h3>
+          <ul>
+            <li>Оркестратор + подключаемые агенты <code style="font-size:10.5px;color:var(--sw-burgundy-deep);background:#faf7f3;padding:1px 5px;border-radius:3px;">src/generation/index.js</code></li>
+            <li>Каждый формат — отдельный composer + валидатор как модуль</li>
+            <li>Knowledge в&nbsp;git: бренд-правила, лексикон, форматы — данные, движок их&nbsp;подхватывает</li>
+            <li>Качество = детерминированный валидатор + repair-loop + golden tests</li>
+            <li>Масштабирование = добавить агента в&nbsp;граф, а&nbsp;не&nbsp;нанять копирайтера</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="platform-chips anim-up" data-d="500">
+        <div class="chips-label">Что уже стоит на&nbsp;платформе</div>
+        <div class="pchip"><span class="dot"></span>SEO-статьи</div>
+        <div class="pchip"><span class="dot"></span>Multiformat&nbsp;— 65&nbsp;текстов / прогон</div>
+        <div class="pchip"><span class="dot"></span>Email-кампании</div>
+        <div class="pchip"><span class="dot"></span>Изображения через&nbsp;Gemini</div>
+        <div class="pchip"><span class="dot"></span>HTML-вёрстка статей</div>
+        <div class="pchip is-next"><span class="dot"></span>+ ваш следующий пайплайн</div>
+      </div>
+
+      <p class="footnote anim-up" data-d="640" style="margin-top:18px">Каждый из&nbsp;этих пяти выходов — это не&nbsp;отдельный продукт. Это пайплайн на&nbsp;одном движке. Шестой подключается за&nbsp;дни инженерной работы, а&nbsp;не&nbsp;за&nbsp;месяцы переписывания. Кодовая база: <code style="font-size:10.5px;color:var(--sw-burgundy-deep);background:#faf7f3;padding:1px 5px;border-radius:3px;">github.com/cowboybebopbebopbbop/sw</code>&nbsp;— готовы показать IT-директору.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 4.2 ПОЗИЦИОНИРОВАНИЕ — МЕЖОТДЕЛЬНЫЙ ВОРКФЛОУ                 -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Позиционирование · где платформа реально шайнит</div>
+      <h2 class="anim-up" data-d="100">Один бриф — четыре роли — готовый продукт</h2>
+      <p class="lede anim-up" data-d="200">Подписка экономит время одного копирайтера. Платформа экономит <strong>цикл согласования между ролями</strong> — а&nbsp;это там, где теряются дни.</p>
+
+      <table class="process-table anim-up" data-d="320">
+        <thead>
+          <tr>
+            <th>Шаг производства SEO-статьи</th>
+            <th>Сейчас (4&nbsp;роли, ручные передачи)</th>
+            <th class="col-us">На&nbsp;платформе SimpleWine&nbsp;Studio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01 · Брифы с&nbsp;темами + ключи</td>
+            <td>Агентство присылает пакет → ждём свободного копирайтера</td>
+            <td class="col-us">Бриф загружается в&nbsp;оркестратор пакетом, парсер раскладывает темы</td>
+          </tr>
+          <tr>
+            <td>02 · Текст статьи</td>
+            <td>Копирайтер пишет ~7&nbsp;ч; редактор может дать правки, может не&nbsp;дать</td>
+            <td class="col-us">Текст-агент с&nbsp;лексиконом + ToV из&nbsp;git, детерминированный валидатор compliance</td>
+          </tr>
+          <tr>
+            <td>03 · Иллюстрации</td>
+            <td>Дизайнер: постановка ТЗ → очередь → отрисовка → согласование</td>
+            <td class="col-us">Image-агент через&nbsp;Gemini, привязка к&nbsp;тексту автоматически</td>
+          </tr>
+          <tr>
+            <td>04 · Вёрстка</td>
+            <td>Верстальщик собирает HTML → проверка отображения → правки</td>
+            <td class="col-us">Layout-агент → готовый HTML в&nbsp;том&nbsp;же артефакте</td>
+          </tr>
+          <tr>
+            <td>05 · Готово к&nbsp;публикации</td>
+            <td>Финальная сборка пакета вручную</td>
+            <td class="col-us">Один артефакт-пакет на&nbsp;выходе оркестратора</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Итого ролей в&nbsp;цикле</td>
+            <td>4&nbsp;роли · 4&nbsp;точки передачи</td>
+            <td class="col-us">1&nbsp;пайплайн · 0&nbsp;ручных передач</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="platform-claim anim-up" data-d="700"><em>ROI подписки</em>&nbsp;= время одного человека.&nbsp;&nbsp;<em>ROI платформы</em>&nbsp;= весь цикл согласования между ролями.</div>
+
+      <p class="footnote anim-up" data-d="840" style="margin-top:18px">Платформа не&nbsp;заменяет роли — она убирает простои между ними. Тему и&nbsp;стратегию задаёт человек, финальное «опубликовать» — тоже человек. Тот&nbsp;же подход применим к&nbsp;multiformat-пакетам, email-кампаниям и&nbsp;любым новым процессам, где сейчас цепочка ролей передаёт работу из&nbsp;рук в&nbsp;руки.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 5.1 СРАВНЕНИЕ — ТАБЛИЦА                                       -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Сравнение с&nbsp;альтернативами</div>
+      <h2 class="anim-up" data-d="100">Что есть на&nbsp;рынке — и&nbsp;почему ничего не&nbsp;закрывает задачу полностью</h2>
+      <p class="lede anim-up" data-d="200">Семь критериев, важных именно для&nbsp;контент-департамента SW. Сравниваем по&nbsp;ним, а&nbsp;не&nbsp;по&nbsp;тем, где удобно нам.</p>
+
+      <table class="audit-table anim-up" data-d="320">
+        <thead>
+          <tr>
+            <th>Критерий</th>
+            <th>ChatGPT&nbsp;Plus<br>Claude&nbsp;Pro</th>
+            <th>Custom&nbsp;GPT<br>Claude&nbsp;Projects</th>
+            <th>AlpinaGPT<br>business</th>
+            <th>Yandex&nbsp;GPT<br>GigaChat</th>
+            <th>Свой разраб<br>с&nbsp;нуля</th>
+            <th class="col-us">SimpleWine<br>Studio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Стоимость / мес</td>
+            <td>~2к&nbsp;₽ / чел</td>
+            <td>~2&ndash;6к&nbsp;₽ / чел</td>
+            <td>13.2к&nbsp;₽</td>
+            <td>по&nbsp;токенам</td>
+            <td>6&ndash;12&nbsp;мес × ЗП</td>
+            <td class="col-us"><strong>от&nbsp;110к</strong></td>
+          </tr>
+          <tr>
+            <td>200+ SEO в&nbsp;мес</td>
+            <td class="no">вручную</td>
+            <td class="no">вручную</td>
+            <td class="no">вручную</td>
+            <td class="no">вручную</td>
+            <td class="no">надо построить</td>
+            <td class="col-us ok">да, по&nbsp;запросу</td>
+          </tr>
+          <tr>
+            <td>Compliance-валидатор</td>
+            <td class="no">нет</td>
+            <td class="no">только промптом</td>
+            <td class="no">нет</td>
+            <td class="no">нет</td>
+            <td class="no">надо написать</td>
+            <td class="col-us ok">детерминированный</td>
+          </tr>
+          <tr>
+            <td>Multiformat 1&nbsp;прогоном</td>
+            <td class="no">нет</td>
+            <td class="no">нет</td>
+            <td class="no">нет</td>
+            <td class="no">нет</td>
+            <td class="no">надо построить</td>
+            <td class="col-us ok">65&nbsp;текстов / прогон</td>
+          </tr>
+          <tr>
+            <td>TOV&nbsp;+ лексикон под&nbsp;бренд</td>
+            <td class="no">в&nbsp;голове юзера</td>
+            <td>облако&nbsp;OpenAI, без&nbsp;истории</td>
+            <td class="no">нет</td>
+            <td class="no">нет</td>
+            <td class="no">надо собрать</td>
+            <td class="col-us ok">в&nbsp;git, версионируется</td>
+          </tr>
+          <tr>
+            <td>Bus factor</td>
+            <td class="no">каждый сам</td>
+            <td class="no">владелец GPT</td>
+            <td class="no">—</td>
+            <td class="no">—</td>
+            <td class="no">1&nbsp;разраб</td>
+            <td class="col-us ok">RUNBOOK + golden tests</td>
+          </tr>
+          <tr>
+            <td>Готовность к&nbsp;Mindbox / CMS</td>
+            <td class="no">нет</td>
+            <td>DIY через&nbsp;Actions</td>
+            <td class="no">нет</td>
+            <td>DIY</td>
+            <td class="no">надо строить</td>
+            <td class="col-us ok">1&ndash;2&nbsp;нед на&nbsp;интеграцию</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="footnote anim-up" data-d="600" style="margin-top:24px">По&nbsp;голой подписке мы&nbsp;дороже всех альтернатив — это правда. Следующий слайд объясняет, почему «голая подписка» и&nbsp;«работающий конвейер на&nbsp;200&nbsp;статей в&nbsp;месяц» — это разные продукты.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 5.2 СРАВНЕНИЕ — ОКНО vs RUNTIME                               -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper">
+      <div class="eyebrow anim-up" data-d="0">Сравнение с&nbsp;альтернативами</div>
+      <h2 class="anim-up" data-d="100">Подписка — это&nbsp;окно. Пилот — это&nbsp;runtime</h2>
+      <p class="lede anim-up" data-d="200">ChatGPT, Custom&nbsp;GPT, AlpinaGPT, YaGPT — это&nbsp;окна для&nbsp;разговора с&nbsp;моделью. Кто-то открывает окно, копирует бриф, копирует ответ, проверяет, вставляет в&nbsp;Mindbox. SimpleWine&nbsp;Studio — runtime: бриф входит, готовый артефакт выходит.</p>
+
+      <div class="flow-row is-them anim-up" data-d="380">
+        <div class="flow-label">С&nbsp;чат-инструментом</div>
+        <div class="flow" data-d="420" data-flow-autoplay="1">
+          <div class="flow-step"><div class="lbl">01</div><div class="name">Бриф</div></div>
+          <div class="flow-step"><div class="lbl">02</div><div class="name">Копи-пейст в&nbsp;чат</div></div>
+          <div class="flow-step"><div class="lbl">03</div><div class="name">Ручная проверка лимитов</div></div>
+          <div class="flow-step"><div class="lbl">04</div><div class="name">Ручная проверка ФАС</div></div>
+          <div class="flow-step"><div class="lbl">05</div><div class="name">Сверка скидки между форматами</div></div>
+          <div class="flow-step"><div class="lbl">06</div><div class="name">Копи-пейст в&nbsp;Mindbox</div></div>
+        </div>
+        <div class="flow-summary">6&nbsp;ручных шагов, точка отказа на&nbsp;каждом</div>
+      </div>
+
+      <div class="flow-row is-us anim-up" data-d="900">
+        <div class="flow-label">С&nbsp;SimpleWine&nbsp;Studio</div>
+        <div class="flow" data-d="940" data-flow-autoplay="1">
+          <div class="flow-step"><div class="lbl">01</div><div class="name">Бриф</div></div>
+          <div class="flow-step"><div class="lbl">02</div><div class="name">Парсер</div></div>
+          <div class="flow-step"><div class="lbl">03</div><div class="name">Генератор</div></div>
+          <div class="flow-step"><div class="lbl">04</div><div class="name">Валидатор</div></div>
+          <div class="flow-step"><div class="lbl">05</div><div class="name">Готовый артефакт</div></div>
+        </div>
+        <div class="flow-summary"><strong>0 ручных шагов до&nbsp;выхода готового пакета</strong></div>
+      </div>
+
+      <p class="footnote anim-up" data-d="1700" style="margin-top:32px">Vinlab × Yandex анонсировали партнёрство — публичных продуктовых результатов пока нет. Окно для&nbsp;решения — сейчас, не&nbsp;через квартал.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 6.1 БЕЗОПАСНОСТЬ — КАРТА ДАННЫХ                              -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Безопасность и&nbsp;контур данных</div>
+      <h2 class="anim-up" data-d="100">Что покидает контур SimpleWine — а&nbsp;что никогда</h2>
+      <p class="lede anim-up" data-d="200">Прозрачная карта потока данных. Без&nbsp;маркетингового пуха — только факт.</p>
+
+      <div class="data-map">
+        <div class="data-col in anim-up" data-d="320">
+          <h3>Никогда не&nbsp;покидает контур SW</h3>
+          <ul>
+            <li>Базы клиентов (CRM, Mindbox-сегменты)</li>
+            <li>Персональные данные клиентов (ФИО, телефон, email)</li>
+            <li>Заказы, чеки, история покупок</li>
+            <li>Внутренние финансовые показатели</li>
+            <li>Метрики Яндекс.Метрики и&nbsp;аналитика</li>
+            <li>Фотографии, исходники макетов</li>
+          </ul>
+        </div>
+        <div class="data-col out anim-up" data-d="420">
+          <h3>Покидает контур (только это)</h3>
+          <ul>
+            <li><strong>Только текст брифа:</strong> продукт, акция, %&nbsp;скидки, обобщённая ЦА</li>
+            <li>ПДн в&nbsp;брифе не&nbsp;должно быть by&nbsp;design — контролируется на&nbsp;входе</li>
+            <li>Pre-processing «редактор брифа» автоматически вырезает потенциальные ПДн перед отправкой</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="data-pipe anim-up" data-d="600">
+        <div><span class="meta">/// КАНАЛ ПЕРЕДАЧИ</span></div>
+        <div>Браузер копирайтера&nbsp;SW <span class="arrow">→</span> <span class="meta">HTTPS / TLS&nbsp;1.3</span> <span class="arrow">→</span> Шлюз&nbsp;API (multi-model роутер)</div>
+        <div>Шлюз&nbsp;API <span class="arrow">→</span> <span class="meta">HTTPS / TLS&nbsp;1.3</span> <span class="arrow">→</span> LLM-провайдер (Anthropic Claude / Yandex&nbsp;GPT&nbsp;— по&nbsp;выбору&nbsp;SW)</div>
+        <div>LLM-провайдер <span class="arrow">→</span> Готовый текст возвращается в&nbsp;браузер. <span class="meta">Транзит. Не&nbsp;персистится на&nbsp;нашей стороне.</span></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 6.2 БЕЗОПАСНОСТЬ — ЧЕК-ЛИСТ ДЛЯ IT-ДИРЕКТОРА                 -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Безопасность и&nbsp;контур данных</div>
+      <h2 class="anim-up" data-d="100">10&nbsp;вопросов от&nbsp;ИБ — 10&nbsp;ответов</h2>
+
+      <table class="audit-table anim-up" data-d="220">
+        <thead>
+          <tr>
+            <th style="width:32%">Вопрос ИБ</th>
+            <th class="col-us">Что обеспечено в&nbsp;пилоте</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Где физически хранятся брифы?</td><td class="col-us">Не&nbsp;хранятся в&nbsp;нашей системе. Передаются транзитом, после генерации не&nbsp;персистятся на&nbsp;нашей стороне.</td></tr>
+          <tr><td>Шифрование канала?</td><td class="col-us">TLS&nbsp;1.3, end-to-end по&nbsp;всему маршруту.</td></tr>
+          <tr><td>Кто имеет доступ к&nbsp;брифам?</td><td class="col-us">Только аутентифицированный пользователь&nbsp;SW в&nbsp;своей сессии. Изоляция тенанта на&nbsp;уровне ключа.</td></tr>
+          <tr><td>Учит ли LLM-провайдер модель на&nbsp;наших данных?</td><td class="col-us">Anthropic — нет (no-training by&nbsp;default, фиксируется в&nbsp;договоре). Yandex&nbsp;GPT — нет, по&nbsp;корп-договору.</td></tr>
+          <tr><td>Аудит-лог обращений</td><td class="col-us">Append-only лог в&nbsp;Yandex&nbsp;Object&nbsp;Storage, экспорт в&nbsp;PDF — входит в&nbsp;пилот.</td></tr>
+          <tr><td>Аутентификация</td><td class="col-us">OAuth&nbsp;2.0&nbsp;+ опционально SSO через Keycloak / корп.&nbsp;AD — входит в&nbsp;пилот.</td></tr>
+          <tr><td>152-ФЗ (ПДн)</td><td class="col-us">В&nbsp;брифах ПДн не&nbsp;передаются by&nbsp;design. Pre-processing «редактор брифа» автоматически вырезает потенциальные ПДн.</td></tr>
+          <tr><td>Юрисдикция данных</td><td class="col-us">Опция&nbsp;1: Anthropic&nbsp;(US). Опция&nbsp;2: Yandex&nbsp;GPT&nbsp;(РФ) для&nbsp;чувствительных шагов. Multi-model роутинг настраивается под&nbsp;политики&nbsp;IT.</td></tr>
+          <tr><td>Договор / NDA / DPA</td><td class="col-us">Стандартный пакет: NDA + DPA + SLA на&nbsp;uptime. Услуги оказываются с&nbsp;российского юрлица в&nbsp;рублях.</td></tr>
+          <tr><td>Бэкапы и&nbsp;инцидент-менеджмент</td><td class="col-us">Knowledge-база (бренд-гайд, лексикон, правила) — в&nbsp;git с&nbsp;историей. Runbook реагирования на&nbsp;инцидент — часть документации пилота.</td></tr>
+        </tbody>
+      </table>
+
+      <p class="footnote anim-up" data-d="500" style="margin-top:18px">Полный технический документ для&nbsp;ИБ — отдельный pre-pilot deliverable, передаётся напрямую IT-директору. Этот слайд — выжимка.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 6.3 БЕЗОПАСНОСТЬ — ТРИ УРОВНЯ КОНТУРА                         -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Безопасность и&nbsp;контур данных</div>
+      <h2 class="anim-up" data-d="100">Под&nbsp;политики&nbsp;ИБ — три уровня контура</h2>
+      <p class="lede anim-up" data-d="200">Архитектура изначально multi-model. Можно выбрать, какие шаги пайплайна выполняются на&nbsp;каком провайдере.</p>
+
+      <div class="tier-cards">
+        <div class="tier-card recommended anim-up" data-d="320">
+          <div class="tier-label">Уровень 1 · Стандартный</div>
+          <h3>Рекомендуем для&nbsp;пилота</h3>
+          <ul>
+            <li>Генерация: Anthropic Claude Opus (через посредника)</li>
+            <li>Простые шаги (подсчёт символов, парсинг): Gemini Flash / Haiku</li>
+            <li>Юрисдикция: смешанная, без&nbsp;ПДн</li>
+          </ul>
+          <div class="when">Срок: готово сейчас</div>
+        </div>
+        <div class="tier-card anim-up" data-d="420">
+          <div class="tier-label">Уровень 2 · РФ-приоритет</div>
+          <h3>Для&nbsp;повышенных требований ИБ</h3>
+          <ul>
+            <li>Чувствительные шаги: Yandex&nbsp;GPT / GigaChat (РФ)</li>
+            <li>Креативные шаги: Anthropic, опционально</li>
+            <li>Юрисдикция: преимущественно РФ</li>
+          </ul>
+          <div class="when">Срок: +1&ndash;2&nbsp;нед на&nbsp;роутинг</div>
+        </div>
+        <div class="tier-card anim-up" data-d="520">
+          <div class="tier-label">Уровень 3 · Self-hosted</div>
+          <h3>Для&nbsp;on-prem-требований</h3>
+          <ul>
+            <li>Self-hosted Qwen&nbsp;3 / DeepSeek&nbsp;V3 на&nbsp;Yandex&nbsp;Cloud&nbsp;GPU</li>
+            <li>Полностью внутри корпоративного облака&nbsp;SW</li>
+            <li>Юрисдикция: полностью РФ, веса моделей — у&nbsp;вас</li>
+          </ul>
+          <div class="when">Срок: отдельный спринт после пилота</div>
+        </div>
+      </div>
+
+      <p class="footnote anim-up" data-d="700" style="margin-top:24px">Валидатор и&nbsp;обвязка работают на&nbsp;любой из&nbsp;трёх конфигураций — это собственная разработка, не&nbsp;зависит от&nbsp;LLM-провайдера. Смена контура не&nbsp;ломает compliance-гарантии.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 7.1 ЦЕНА — РАЗБИВКА                                           -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Разбивка цены</div>
+      <h2 class="anim-up" data-d="100">170&nbsp;000&nbsp;₽ / месяц — что внутри</h2>
+      <p class="lede anim-up" data-d="200">Это не&nbsp;подписка на&nbsp;чат. Это услуга с&nbsp;тремя статьями расходов.</p>
+
+      <table class="audit-table anim-up" data-d="320">
+        <thead>
+          <tr><th style="width:28%">Статья расхода</th><th style="width:18%">₽ / мес</th><th>Что входит</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Токены LLM</td><td class="num-cell">~50&ndash;60к</td><td>Anthropic Claude&nbsp;Opus 4.6/4.7&nbsp;+ резерв на&nbsp;repair&nbsp;loop. Расход прозрачно прокидывается в&nbsp;ежемесячный отчёт.</td></tr>
+          <tr><td>Платформа и&nbsp;поддержка</td><td class="num-cell">~50&ndash;60к</td><td>Хостинг, мониторинг, реакция на&nbsp;инциденты, обновления валидатора, патчи безопасности.</td></tr>
+          <tr><td>Кастомизация и&nbsp;интеграции</td><td class="num-cell">~50&ndash;60к</td><td>Настройка под&nbsp;форматы&nbsp;SW, расширение лексикона, добавление новых форматов под&nbsp;запрос (например, SKU-интеграция в&nbsp;SEO).</td></tr>
+          <tr><td><strong>Итого</strong></td><td class="num-cell"><strong>~170&nbsp;000</strong></td><td><strong>Услуги&nbsp;+ инфра. Не&nbsp;лицензия.</strong></td></tr>
+        </tbody>
+      </table>
+
+      <div class="price-anchors">
+        <div class="metric anim-up" data-d="500">
+          <div class="num">~6&nbsp;800<em>₽</em></div>
+          <div class="label">Реальные токены / мес</div>
+          <div class="desc">На&nbsp;200&nbsp;SEO-статей</div>
+        </div>
+        <div class="metric anim-up" data-d="580">
+          <div class="num">~50<em>₽</em></div>
+          <div class="label">Себестоимость пакета</div>
+          <div class="desc">65&nbsp;текстов одним прогоном</div>
+        </div>
+        <div class="metric anim-up" data-d="660">
+          <div class="num">~34<em>₽</em></div>
+          <div class="label">Себестоимость статьи</div>
+          <div class="desc">Одна SEO-статья с&nbsp;валидацией</div>
+        </div>
+      </div>
+
+      <p class="footnote anim-up" data-d="820" style="margin-top:24px">Точная разбивка в&nbsp;КП формируется под&nbsp;выбранный вариант пилота. Маржа фиксируется в&nbsp;коридоре курса USD/RUB ±10%; при&nbsp;выходе за&nbsp;коридор — пересмотр без&nbsp;штрафных.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 7.2 ЦЕНА — TCO СЦЕНАРИИ                                       -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Разбивка цены</div>
+      <h2 class="anim-up" data-d="100">Подписка дешевле. Total cost — нет</h2>
+      <p class="lede anim-up" data-d="200">«AlpinaGPT 13к vs пилот 170к» — это сравнение Word и&nbsp;CMS. Считать надо суммарные затраты при&nbsp;сопоставимом результате.</p>
+
+      <div class="scenario-cards">
+        <div class="scenario-card anim-up" data-d="320">
+          <div class="scn-label">Сценарий A</div>
+          <h3>Делаем сами с&nbsp;подпиской AlpinaGPT&nbsp;/ ChatGPT</h3>
+          <ul>
+            <li>Подписка: 13&nbsp;200&nbsp;₽ / мес</li>
+            <li>3&nbsp;копирайтера × 100&nbsp;статей × 7&nbsp;ч × ~1&nbsp;200&nbsp;₽/ч = ~2.5&nbsp;млн&nbsp;₽ ФОТ</li>
+            <li>Compliance вручную → риск штрафа ФАС до&nbsp;500к</li>
+            <li>Несогласованность скидок между форматами</li>
+          </ul>
+          <div class="total"><span class="total-lbl">Итого / мес</span>~2.5&nbsp;млн&nbsp;₽<br><span style="font-family:var(--font-body);font-size:11px;font-weight:600;color:var(--sw-ink-soft);text-transform:none;letter-spacing:0;">+ риск штрафа</span></div>
+        </div>
+        <div class="scenario-card anim-up" data-d="420">
+          <div class="scn-label">Сценарий B</div>
+          <h3>Строим сами разработчиком</h3>
+          <ul>
+            <li>6&ndash;12&nbsp;мес разработки × ~250&ndash;400к ЗП = 1.5&ndash;4.8&nbsp;млн&nbsp;₽ единоразово</li>
+            <li>Поддержка: 1&nbsp;разраб в&nbsp;аренде = ~300к / мес</li>
+            <li>Месяцы без&nbsp;инструмента = упущенный X2&ndash;X4&nbsp;рост SEO</li>
+          </ul>
+          <div class="total"><span class="total-lbl">Вход + поддержка</span>1.5&ndash;4.8&nbsp;млн<br><span style="font-family:var(--font-body);font-size:11px;font-weight:600;color:var(--sw-ink-soft);text-transform:none;letter-spacing:0;">+ ~300к / мес</span></div>
+        </div>
+        <div class="scenario-card recommended anim-up" data-d="520">
+          <div class="scn-label">Сценарий C · Рекомендуем</div>
+          <h3>Пилот SimpleWine&nbsp;Studio</h3>
+          <ul>
+            <li>Пилот: 170&nbsp;000&nbsp;₽ / мес</li>
+            <li>ФОТ копирайтера: 100&nbsp;статей × 2.5&nbsp;ч × 1&nbsp;200&nbsp;₽ = 300к&nbsp;/&nbsp;мес</li>
+            <li>Гарантия compliance — валидатор не&nbsp;пропустит</li>
+            <li>Multiformat-консистентность встроенно</li>
+          </ul>
+          <div class="total"><span class="total-lbl">Итого / мес</span>~470&nbsp;000&nbsp;₽<br><span style="font-family:var(--font-body);font-size:11px;font-weight:600;color:var(--sw-ink-soft);text-transform:none;letter-spacing:0;">+ 0&nbsp;₽ риск штрафа</span></div>
+        </div>
+      </div>
+
+      <p class="footnote anim-up" data-d="720" style="margin-top:22px">Час копирайтера и&nbsp;ставка 1&nbsp;200&nbsp;₽ — рыночный ориентир Москвы (с&nbsp;налогами). Если внутренние ставки&nbsp;SW другие — пересчитываем; относительные пропорции от&nbsp;этого не&nbsp;меняются.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 7.3 ЦЕНА — ROI                                                -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Разбивка цены</div>
+      <h2 class="anim-up" data-d="100">Когда пилот окупается</h2>
+      <p class="lede anim-up" data-d="200">Окупаемость считается не&nbsp;от&nbsp;«снижения стоимости одного текста», а&nbsp;от&nbsp;высвобожденного фонда оплаты труда.</p>
+
+      <div class="metrics" style="grid-template-columns:repeat(3,1fr);margin-top:30px">
+        <div class="metric anim-up" data-d="320">
+          <div class="num"><span class="count" data-count="4">0</span><em>,5 ч</em></div>
+          <div class="label">Экономия на&nbsp;статье</div>
+          <div class="desc">7&nbsp;ч → 2,5&nbsp;ч копирайтера</div>
+        </div>
+        <div class="metric anim-up" data-d="400">
+          <div class="num">~<span class="count" data-count="5400">0</span><em>₽</em></div>
+          <div class="label">Стоимость этих часов</div>
+          <div class="desc">По&nbsp;ставке 1&nbsp;200&nbsp;₽/ч</div>
+        </div>
+        <div class="metric anim-up" data-d="480">
+          <div class="num">~<span class="count" data-count="32">0</span><em> ст.</em></div>
+          <div class="label">Точка безубыточности</div>
+          <div class="desc">Месячный объём при&nbsp;пилоте 170к</div>
+        </div>
+      </div>
+
+      <table class="audit-table anim-up" data-d="640" style="margin-top:30px">
+        <thead>
+          <tr><th>Объём SEO / мес</th><th>Экономия ФОТ</th><th>Стоимость пилота</th><th class="col-us">ROI</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>50 статей</td><td>~270к&nbsp;₽</td><td>170к&nbsp;₽</td><td class="col-us num-cell">1.6×</td></tr>
+          <tr><td>100 статей</td><td>~540к&nbsp;₽</td><td>170к&nbsp;₽</td><td class="col-us num-cell">3.2×</td></tr>
+          <tr><td><strong>200 статей (целевой)</strong></td><td><strong>~1&nbsp;080к&nbsp;₽</strong></td><td><strong>170к&nbsp;₽</strong></td><td class="col-us num-cell"><strong>6.4×</strong></td></tr>
+          <tr><td>250 статей (амбиция)</td><td>~1&nbsp;350к&nbsp;₽</td><td>170к&nbsp;₽</td><td class="col-us num-cell">7.9×</td></tr>
+        </tbody>
+      </table>
+
+      <p class="footnote anim-up" data-d="840" style="margin-top:18px">Реальный ROI выше: к&nbsp;экономии ФОТ добавляется высвобожденное время на&nbsp;ресёрч и&nbsp;новые форматы, X2&ndash;X4&nbsp;рост SEO для&nbsp;восстановления органики, исключение compliance-инцидентов. В&nbsp;расчёт сознательно не&nbsp;заложены — продаём только то, что измеримо в&nbsp;первый месяц.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 8.1 ПИЛОТ — ТРИ ВАРИАНТА                                      -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Варианты пилота</div>
+      <h2 class="anim-up" data-d="100">Три уровня обязательств — выбираете глубину</h2>
+      <p class="lede anim-up" data-d="200">Не&nbsp;три параллельных пакета, а&nbsp;три последовательные ступени. На&nbsp;любой можно остановиться.</p>
+
+      <div class="pilot-cards">
+        <div class="pilot-card anim-up" data-d="320">
+          <div class="tier">Вариант A</div>
+          <h3>SEO Sprint</h3>
+          <div class="price">~110&nbsp;000&nbsp;₽</div>
+          <div class="price-sub">в&nbsp;месяц · 1&nbsp;месяц · 1&nbsp;копирайтер</div>
+          <div class="field"><span class="k">Цель</span><span class="v">Проверить X2&ndash;X4 рост объёма SEO без&nbsp;потери качества</span></div>
+          <div class="field"><span class="k">Объём</span><span class="v">100 SEO-статей за&nbsp;1&nbsp;месяц</span></div>
+          <div class="field"><span class="k">Что входит</span>
+            <ul>
+              <li>Настройка системы под&nbsp;фокусы SEO&nbsp;SW</li>
+              <li>Обучение 1&nbsp;копирайтера</li>
+              <li>Картинки + готовая HTML-вёрстка</li>
+              <li>Токены, поддержка</li>
+            </ul>
+          </div>
+          <div class="field"><span class="k">Чего НЕТ</span>
+            <ul class="nope">
+              <li>Multiformat (push / sms / баннеры)</li>
+              <li>Интеграции с&nbsp;Mindbox / CMS</li>
+              <li>Модерация отзывов</li>
+            </ul>
+          </div>
+          <div class="field"><span class="k">Критерии успеха</span>
+            <ul>
+              <li>≤ 2,5&nbsp;ч на&nbsp;статью</li>
+              <li>100% статей принято редактором</li>
+              <li>Замер влияния на&nbsp;органику через 4&nbsp;нед</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pilot-card recommended anim-up" data-d="420">
+          <div class="ribbon">★ Рекомендуем</div>
+          <div class="tier">Вариант B</div>
+          <h3>SEO + Multiformat</h3>
+          <div class="price">~170&nbsp;000&nbsp;₽</div>
+          <div class="price-sub">в&nbsp;месяц · 2&nbsp;месяца · 2&nbsp;копирайтера</div>
+          <div class="field"><span class="k">Цель</span><span class="v">Проверить, что система решает не&nbsp;только SEO, но&nbsp;и&nbsp;всю текстовую рутину контент-отдела</span></div>
+          <div class="field"><span class="k">Объём</span><span class="v">200 SEO + 8 multiformat-пакетов за&nbsp;2&nbsp;месяца</span></div>
+          <div class="field"><span class="k">Что входит</span>
+            <ul>
+              <li>Всё из&nbsp;A</li>
+              <li>Multiformat: 65 текстов/прогон с&nbsp;гарантией compliance</li>
+              <li>Расширение валидатора под&nbsp;новые форматы</li>
+              <li>Аудит-лог + pre-processing брифа (защита от&nbsp;ПДн)</li>
+            </ul>
+          </div>
+          <div class="field"><span class="k">Чего НЕТ</span>
+            <ul class="nope">
+              <li>Интеграции Mindbox / Bitrix (отложены в&nbsp;C)</li>
+              <li>Модерация отзывов</li>
+            </ul>
+          </div>
+          <div class="field"><span class="k">Критерии успеха</span>
+            <ul>
+              <li>200 статей/мес при&nbsp;≤ 2,5&nbsp;ч/статью</li>
+              <li>~520 текстов с&nbsp;0 нарушений compliance</li>
+              <li>Замер высвобожденного времени</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pilot-card anim-up" data-d="520">
+          <div class="tier">Вариант C</div>
+          <h3>Production-конвейер</h3>
+          <div class="price">~250&nbsp;000&nbsp;₽</div>
+          <div class="price-sub">в&nbsp;месяц · 3&nbsp;месяца · 3+ копирайтера</div>
+          <div class="field"><span class="k">Цель</span><span class="v">Встроить в&nbsp;продакшн-стек SW (Mindbox, push, SKU в&nbsp;SEO)</span></div>
+          <div class="field"><span class="k">Объём</span><span class="v">Весь контент-отдел + 1&nbsp;интеграция на&nbsp;выбор + multiformat без&nbsp;ограничения</span></div>
+          <div class="field"><span class="k">Что входит</span>
+            <ul>
+              <li>Всё из&nbsp;B</li>
+              <li>1 production-интеграция (Mindbox / SKU / push)</li>
+              <li>Расширенный SLA (реакция 4&nbsp;ч в&nbsp;раб. время)</li>
+              <li>Multi-model роутинг для&nbsp;оптимизации стоимости</li>
+              <li>Опция РФ-контура (YaGPT для&nbsp;чувствительных шагов)</li>
+            </ul>
+          </div>
+          <div class="field"><span class="k">Чего НЕТ</span>
+            <ul class="nope">
+              <li>Модерация отзывов клиентов (отдельный проект, 152-ФЗ)</li>
+            </ul>
+          </div>
+          <div class="field"><span class="k">Критерии успеха</span>
+            <ul>
+              <li>Работающая интеграция с&nbsp;целевой системой</li>
+              <li>Time-to-market нового контента ≥ 3×</li>
+              <li>Бюджет токенов оптимизирован ≥ 30%</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 8.2 ПИЛОТ — ОБОСНОВАНИЕ ВЫБОРА B                              -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper">
+      <div class="eyebrow anim-up" data-d="0">Варианты пилота</div>
+      <h2 class="anim-up" data-d="100">Вариант&nbsp;B — почему именно он</h2>
+      <p class="lede anim-up" data-d="200">Минимальный уровень, на&nbsp;котором параллельно проверяются все три гипотезы Алины.</p>
+
+      <div class="reco-grid">
+        <div class="reco-card anim-up" data-d="320">
+          <div class="reco-num">01</div>
+          <h3>Бизнес-гипотеза</h3>
+          <p>200 SEO-статей / мес — это X2&ndash;X4 от&nbsp;текущего объёма.</p>
+          <p>Если на&nbsp;этом объёме органика начинает восстанавливаться — задача решена.</p>
+        </div>
+        <div class="reco-card anim-up" data-d="420">
+          <div class="reco-num">02</div>
+          <h3>Архитектурная гипотеза</h3>
+          <p>Multiformat-пакеты доказывают то, что на&nbsp;одном&nbsp;SEO не&nbsp;видно: систему нельзя заменить Custom&nbsp;GPT / AlpinaGPT.</p>
+          <p>65 согласованных текстов одним прогоном — эффект, который AlpinaGPT не&nbsp;воспроизведёт.</p>
+        </div>
+        <div class="reco-card anim-up" data-d="520">
+          <div class="reco-num">03</div>
+          <h3>Операционная гипотеза</h3>
+          <p>2 копирайтера в&nbsp;системе показывают реальную нагрузку до&nbsp;того, как делать ставку на&nbsp;полную команду.</p>
+          <p>В&nbsp;вариант&nbsp;B заложен RUNBOOK + golden tests → подключение 3-го/4-го без&nbsp;вендора.</p>
+        </div>
+      </div>
+
+      <div class="reco-not anim-up" data-d="700">
+        <h3>Что мы&nbsp;НЕ делаем в&nbsp;B (и&nbsp;почему это правильно)</h3>
+        <ul>
+          <li>Не&nbsp;лезем в&nbsp;Mindbox / Bitrix — это бюрократия с&nbsp;IT, отложена на&nbsp;C</li>
+          <li>Не&nbsp;модерируем отзывы — отдельный проект (PII), фокус размывается</li>
+          <li>Не&nbsp;строим сразу под&nbsp;3&nbsp;копирайтера — масштабирование после доказательства гипотезы</li>
+          <li>Если по&nbsp;итогам B метрики не&nbsp;сошлись — расходимся без&nbsp;обязательств по&nbsp;C</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 8.3 ПИЛОТ — СВОДНАЯ ТАБЛИЦА                                   -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper dense">
+      <div class="eyebrow anim-up" data-d="0">Варианты пилота</div>
+      <h2 class="anim-up" data-d="100">Что выбираете</h2>
+
+      <table class="audit-table anim-up" data-d="220">
+        <thead>
+          <tr>
+            <th></th>
+            <th>A · SEO Sprint</th>
+            <th class="col-us">B · SEO + Multiformat ★</th>
+            <th>C · Production</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Срок</td><td>1 мес</td><td class="col-us"><strong>2 мес</strong></td><td>3 мес</td></tr>
+          <tr><td>Цена / мес</td><td>~110к&nbsp;₽</td><td class="col-us"><strong>~170к&nbsp;₽</strong></td><td>~250к&nbsp;₽</td></tr>
+          <tr><td>Объём SEO</td><td>100 шт</td><td class="col-us"><strong>200 шт</strong></td><td>200+ шт</td></tr>
+          <tr><td>Multiformat</td><td class="no">—</td><td class="col-us"><strong>8 пакетов (~520 текстов)</strong></td><td>без&nbsp;ограничения</td></tr>
+          <tr><td>Копирайтеров в&nbsp;системе</td><td>1</td><td class="col-us"><strong>2</strong></td><td>3+</td></tr>
+          <tr><td>Интеграции с&nbsp;прод-стеком</td><td class="no">—</td><td class="col-us no">—</td><td>1 на&nbsp;выбор</td></tr>
+          <tr><td>Главная гипотеза</td><td>объём SEO</td><td class="col-us"><strong>категория продукта</strong></td><td>масштаб + интеграция</td></tr>
+          <tr><td>Минимальный коммитмент</td><td>1 месяц</td><td class="col-us"><strong>2 месяца</strong></td><td>3 месяца</td></tr>
+          <tr><td>Возможность продлить</td><td>в&nbsp;B</td><td class="col-us"><strong>в&nbsp;C</strong></td><td>пост-пилот</td></tr>
+        </tbody>
+      </table>
+
+      <p class="footnote anim-up" data-d="500" style="margin-top:22px"><span class="stamp">Любой из&nbsp;трёх вариантов</span> оплачивается с&nbsp;российского юрлица в&nbsp;рублях. Формат договора (с&nbsp;ИП или&nbsp;ООО заказчика) согласуем под&nbsp;бухгалтерию&nbsp;SW — нужны лимиты и&nbsp;политика по&nbsp;ИП от&nbsp;вашей стороны.</p>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 9. СЛЕДУЮЩИЕ ШАГИ                                             -->
+    <!-- ============================================================ -->
+    <section data-background-color="#ffffff" class="bg-paper">
+      <div class="eyebrow anim-up" data-d="0">Что предлагаем дальше</div>
+
+      <div class="steps">
+        <div class="step anim-up" data-d="180">
+          <div class="num">01</div>
+          <h3>Технический бриф для&nbsp;IT-директора</h3>
+          <ul>
+            <li>Передаём ИБ-материал по&nbsp;слайдам «Безопасность» в&nbsp;развёрнутом виде</li>
+            <li>Опционально — звонок «Вера + наш техлид × Алина + IT-директор&nbsp;SW»</li>
+            <li>Согласуем формат договора (ИП&nbsp;/ ООО) и&nbsp;формальные требования</li>
+          </ul>
+        </div>
+        <div class="step anim-up" data-d="380">
+          <div class="num">02</div>
+          <h3>Старт варианта&nbsp;B (после согласования IT)</h3>
+          <ul>
+            <li><strong>Кикофф (1&nbsp;день):</strong> фиксируем фокусы, форматы, лексикон</li>
+            <li><strong>Через 2&nbsp;недели:</strong> первый замер — 50&nbsp;статей + 2&nbsp;multiformat-пакета</li>
+            <li><strong>Через 2&nbsp;месяца:</strong> итоги пилота, решение по&nbsp;варианту&nbsp;C</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="footnote anim-up" data-d="700" style="margin-top:36px"><strong>Дедлайн.</strong> До&nbsp;7-го: финализируем правки презентации и&nbsp;техдок для&nbsp;IT. 7&ndash;17: Вера в&nbsp;отпуске — мы&nbsp;готовим контракт и&nbsp;ИБ-документы. После 17-го: кикофф варианта&nbsp;B, если согласовано.</p>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0,
+    transition: 'fade',
+    hash: true,
+    controls: true,
+    progress: false,
+    slideNumber: false,
+  });
+
+  /* ============================================================
+     ANIMATION ORCHESTRATOR
+     - Triggered on slide enter (Reveal `slidechanged` + initial `ready`).
+     - Adds `is-in` to elements with [data-d] after their delay (ms).
+     - Special handling: .flow autoplay sequence, count-up numbers.
+     - Resets on slide leave so re-entering replays the choreography.
+     ============================================================ */
+  (function () {
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var animSelector = '[data-d], .metric, .title-mock, .compare .with, .flow';
+    var countSelector = '.count[data-count]';
+
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function runCountUp(el) {
+      var target = parseInt(el.getAttribute('data-count'), 10);
+      if (isNaN(target)) return;
+      if (prefersReduced) { el.textContent = String(target); return; }
+      var dur = 1100;
+      var start = performance.now();
+      function tick(now) {
+        var t = Math.min(1, (now - start) / dur);
+        var v = Math.round(easeOutCubic(t) * target);
+        el.textContent = String(v);
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function runFlow(flow) {
+      var steps = flow.querySelectorAll('.flow-step');
+      var stepGap = 620;
+      steps.forEach(function (step, i) {
+        setTimeout(function () {
+          // dim previous steps
+          for (var j = 0; j < i; j++) steps[j].classList.add('is-dim');
+          step.classList.add('is-in');
+        }, i * stepGap);
+      });
+    }
+
+    // Rotating chip highlight inside the brief mock.
+    // Stored on the slide element so we can clear on leave.
+    function startChipRotator(slide) {
+      var chips = slide.querySelectorAll('.title-mock .chip');
+      if (!chips.length) return;
+      // Initial active = first chip ("Мульти")
+      chips.forEach(function (c, i) {
+        c.classList.toggle('is-active', i === 0);
+      });
+      if (prefersReduced) return;
+      var current = 0;
+      slide.__chipTimer = setInterval(function () {
+        // Pick a random index different from the current one
+        var next = Math.floor(Math.random() * (chips.length - 1));
+        if (next >= current) next += 1;
+        chips[current].classList.remove('is-active');
+        chips[next].classList.add('is-active');
+        current = next;
+      }, 2200);
+    }
+
+    function stopChipRotator(slide) {
+      if (slide && slide.__chipTimer) {
+        clearInterval(slide.__chipTimer);
+        slide.__chipTimer = null;
+      }
+    }
+
+    function activateSlide(slide) {
+      if (!slide) return;
+
+      // 1) Generic [data-d] elements
+      slide.querySelectorAll('[data-d]').forEach(function (el) {
+        var delay = parseInt(el.getAttribute('data-d'), 10) || 0;
+        setTimeout(function () { el.classList.add('is-in'); }, prefersReduced ? 0 : delay);
+      });
+
+      // 2) Count-up numbers — start when their .metric becomes is-in
+      slide.querySelectorAll('.metric').forEach(function (metric) {
+        var delay = parseInt(metric.getAttribute('data-d'), 10) || 0;
+        var counts = metric.querySelectorAll(countSelector);
+        setTimeout(function () {
+          counts.forEach(runCountUp);
+        }, prefersReduced ? 0 : delay + 200);
+      });
+
+      // 3) Flow autoplay — kick off after the .flow itself becomes is-in
+      slide.querySelectorAll('.flow[data-flow-autoplay]').forEach(function (flow) {
+        var delay = parseInt(flow.getAttribute('data-d'), 10) || 0;
+        setTimeout(function () { runFlow(flow); }, prefersReduced ? 0 : delay + 250);
+      });
+
+      // 4) Chip rotator — start after the brief mock has settled in
+      if (slide.querySelector('.title-mock .chip')) {
+        setTimeout(function () { startChipRotator(slide); }, prefersReduced ? 0 : 1300);
+      }
+    }
+
+    function resetSlide(slide) {
+      if (!slide) return;
+      stopChipRotator(slide);
+      slide.querySelectorAll('.is-in').forEach(function (el) { el.classList.remove('is-in'); });
+      slide.querySelectorAll('.is-dim').forEach(function (el) { el.classList.remove('is-dim'); });
+      slide.querySelectorAll('.chip.is-active').forEach(function (el) { el.classList.remove('is-active'); });
+      slide.querySelectorAll(countSelector).forEach(function (el) { el.textContent = '0'; });
+    }
+
+    Reveal.on('ready', function (e) {
+      // Reset all slides except current, then activate current.
+      document.querySelectorAll('.reveal .slides section').forEach(function (s) {
+        if (s !== e.currentSlide) resetSlide(s);
+      });
+      activateSlide(e.currentSlide);
+    });
+
+    Reveal.on('slidechanged', function (e) {
+      if (e.previousSlide) resetSlide(e.previousSlide);
+      activateSlide(e.currentSlide);
+    });
+  })();
+</script>
+</body>
+</html>
